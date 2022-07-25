@@ -9,11 +9,22 @@
  */
 import Colors from './constants/Colors';
 import {StatusBar, View, Text, useColorScheme} from 'react-native';
-import React, {Suspense} from 'react';
+import React, {Suspense, useEffect} from 'react';
 import Navigation from './navigation';
 import {RecoilRoot} from 'recoil';
+import SplashScreen from 'react-native-splash-screen';
 
 export default function App() {
+  useEffect(()=>{
+    try{
+      setTimeout(()=>{
+        SplashScreen.hide()
+      },1000);
+    }catch(e){
+      console.warn('Error Occur')
+    }
+  },[]);
+  
   return (
     <RecoilRoot>
       <Suspense
