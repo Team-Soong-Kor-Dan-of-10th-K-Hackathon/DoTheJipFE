@@ -6,10 +6,12 @@ import {
   StyleSheet,
   Text,
   View,
+  Modal,
 } from 'react-native';
 
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
+import ToDo from '../components/ToDo';
 
 import ReactNativeCalendarStrip from 'react-native-calendar-strip';
 import * as React from 'react';
@@ -235,64 +237,7 @@ export default function ToDoListScreen() {
             </Text>
           )}
           renderItem={({item}) => (
-            <View
-              style={{
-                width: Layout.Width * 0.86,
-                height: Layout.Height * 0.05,
-                flexDirection: 'row',
-                alignItems: 'center',
-                backgroundColor: Colors.lightGray,
-                borderRadius: 15,
-                paddingHorizontal: Layout.Width * 0.03,
-                marginVertical: Layout.Height * 0.01,
-                justifyContent: 'space-between',
-              }}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <View
-                  style={{
-                    marginRight: Layout.Width * 0.03,
-                    width: Layout.Width * 0.06,
-                    height: Layout.Width * 0.06,
-                    borderRadius: Layout.Width * 0.06,
-                    backgroundColor:
-                      item.who == '엄마'
-                        ? Colors.purple
-                        : item.who == '아빠'
-                        ? Colors.skyblue
-                        : item.who == '딸'
-                        ? Colors.pink
-                        : Colors.green,
-                  }}
-                />
-                <Text
-                  style={{
-                    color: Colors.black,
-                    fontSize: Layout.FontScale * 18,
-                  }}>
-                  {item.todo}
-                </Text>
-              </View>
-              <Pressable
-                style={({pressed}) => ({
-                  opacity: pressed ? 0.5 : 1,
-                })}>
-                {/* <FontAwesome
-                  name="check-square"
-                  size={24}
-                  color={
-                    item.done
-                      ? item.who == "엄마"
-                        ? Colors.purple
-                        : item.who == "아빠"
-                        ? Colors.skyblue
-                        : item.who == "딸"
-                        ? Colors.pink
-                        : Colors.green
-                      : Colors.darkGray
-                  }
-                /> */}
-              </Pressable>
-            </View>
+            <ToDo todo={item.todo} who={item.who} done={item.done} />
           )}
         />
         <SectionList
@@ -304,68 +249,7 @@ export default function ToDoListScreen() {
             </Text>
           )}
           renderItem={({item}) => (
-            <View
-              style={{
-                width: Layout.Width * 0.86,
-                height: Layout.Height * 0.05,
-                flexDirection: 'row',
-                alignItems: 'center',
-                backgroundColor: Colors.lightGray,
-                borderRadius: 15,
-                paddingHorizontal: Layout.Width * 0.03,
-                marginVertical: Layout.Height * 0.01,
-                justifyContent: 'space-between',
-              }}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                }}>
-                <View
-                  style={{
-                    marginRight: Layout.Width * 0.03,
-                    width: Layout.Width * 0.06,
-                    height: Layout.Width * 0.06,
-                    borderRadius: Layout.Width * 0.06,
-                    backgroundColor:
-                      item.who == '엄마'
-                        ? Colors.purple
-                        : item.who == '아빠'
-                        ? Colors.skyblue
-                        : item.who == '딸'
-                        ? Colors.pink
-                        : Colors.green,
-                  }}
-                />
-                <Text
-                  style={{
-                    color: Colors.black,
-                    fontSize: Layout.FontScale * 18,
-                  }}>
-                  {item.todo}
-                </Text>
-              </View>
-              <Pressable
-                style={({pressed}) => ({
-                  opacity: pressed ? 0.5 : 1,
-                })}>
-                {/* <FontAwesome
-                  name="check-square"
-                  size={24}
-                  color={
-                    item.done
-                      ? item.who == "엄마"
-                        ? Colors.purple
-                        : item.who == "아빠"
-                        ? Colors.skyblue
-                        : item.who == "딸"
-                        ? Colors.pink
-                        : Colors.green
-                      : Colors.darkGray
-                  }
-                /> */}
-              </Pressable>
-            </View>
+            <ToDo todo={item.todo} who={item.who} done={item.done} />
           )}
         />
       </ScrollView>
