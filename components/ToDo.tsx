@@ -1,11 +1,13 @@
 import * as React from 'react';
-import {useState, Fragment} from 'react';
+import {useState, useEffect, useRef, Fragment} from 'react';
 import {
   Pressable,
   Text,
   View,
   Modal,
   TouchableWithoutFeedback,
+  Animated,
+  PanResponder,
 } from 'react-native';
 
 import Colors from '../constants/Colors';
@@ -17,9 +19,46 @@ export default function ToDo(props: {
   done: boolean;
 }) {
   const [modalVisible, setModalVisible] = useState(false);
+  const panY = useRef(new Animated.Value(Layout.Height)).current;
+  const translateY = panY.interpolate({
+    inputRange: [-1, 0, 1],
+    outputRange: [0, 0, 1],
+  });
+  const resetBottomSheet = Animated.timing(panY, {
+    toValue: 0,
+    duration: 300,
+    useNativeDriver: true,
+  });
+
+  const closeBottomSheet = Animated.timing(panY, {
+    toValue: Layout.Height,
+    duration: 300,
+    useNativeDriver: true,
+  });
+
+  const panResponders = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: () => false,
+      onPanResponderMove: (event, gestureState) => {
+        if (gestureState.dy > 0 && gestureState.vy > 2) {
+          closeBottomSheet.start(() => setModalVisible(false));
+        } else resetBottomSheet.start();
+      },
+    }),
+  ).current;
+
+  useEffect(() => {
+    if (modalVisible) resetBottomSheet.start();
+  }, [modalVisible]);
+
   return (
     <Fragment>
-      <Modal visible={modalVisible} animationType={'fade'} transparent={true}>
+      <Modal
+        visible={modalVisible}
+        animationType={'fade'}
+        transparent={true}
+        statusBarTranslucent={true}>
         <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
           <View
             style={{
@@ -30,7 +69,7 @@ export default function ToDo(props: {
             }}
           />
         </TouchableWithoutFeedback>
-        <View
+        <Animated.View
           style={{
             width: Layout.Width,
             height: Layout.Height * 0.6,
@@ -40,7 +79,9 @@ export default function ToDo(props: {
             borderTopRightRadius: 20,
             borderTopLeftRadius: 20,
             paddingHorizontal: Layout.Width * 0.07,
-          }}>
+            transform: [{translateY: translateY}],
+          }}
+          {...panResponders.panHandlers}>
           <Pressable
             style={{
               height: Layout.Height * 0.037,
@@ -102,8 +143,9 @@ export default function ToDo(props: {
               </Text>
             </View>
           </View>
-        </View>
+        </Animated.View>
       </Modal>
+
       <Pressable
         onPress={() => {
           setModalVisible(true);
