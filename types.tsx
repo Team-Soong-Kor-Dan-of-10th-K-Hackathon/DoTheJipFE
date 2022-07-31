@@ -7,6 +7,7 @@ declare global {
 }
 
 export type RootStackParamList = {
+  SignIn: undefined;
   ToDoList: undefined;
   SelectCategory: undefined;
   AddCategory: undefined;
