@@ -8,6 +8,7 @@ declare global {
 
 export type RootStackParamList = {
   ToDoList: undefined;
+  AddToDoCategoryScreen: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =

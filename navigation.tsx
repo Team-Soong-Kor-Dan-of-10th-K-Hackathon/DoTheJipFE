@@ -4,11 +4,13 @@ import * as React from "react";
 import { Pressable } from "react-native";
 
 import ToDoListScreen from "./screens/ToDoListScreen";
+import AddToDoCategoryScreen from "./screens/AddToDoCategoryScreen";
 import { RootStackParamList } from "./types";
 
 import GraphIcon from "./assets/icons/graph.svg";
 import HamburgerIcon from "./assets/icons/hamburger.svg";
 import Layout from "./constants/Layout";
+
 export default function Navigation() {
   return (
     <NavigationContainer>
@@ -49,6 +51,10 @@ function RootNavigator() {
             </Pressable>
           ),
         }}
+      />
+       <Stack.Screen
+        name="AddToDoCategoryScreen"
+        component={AddToDoCategoryScreen}
       />
     </Stack.Navigator>
   );
