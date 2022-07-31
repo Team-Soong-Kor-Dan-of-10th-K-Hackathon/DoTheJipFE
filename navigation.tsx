@@ -5,13 +5,14 @@ import {Pressable, Text} from 'react-native';
 
 import ToDoListScreen from './screens/ToDoListScreen';
 import SelectCategoryScreen from './screens/SelectCategoryScreen';
+import AddCategoryScreen from './screens/AddCategoryScreen';
+import SignInScreen from './screens/SignInScreen';
 import {RootStackParamList} from './types';
 
 import GraphIcon from './assets/icons/graph.svg';
 import HamburgerIcon from './assets/icons/hamburger.svg';
 import Layout from './constants/Layout';
 import Colors from './constants/Colors';
-import AddCategoryScreen from './screens/AddCategoryScreen';
 
 export default function Navigation() {
   return (
@@ -25,12 +26,21 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerShadowVisible: false,
+      }}>
+      <Stack.Screen
+        name="SignIn"
+        component={SignInScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Screen
         name="ToDoList"
         component={ToDoListScreen}
         options={{
-          headerShadowVisible: false,
           title: '',
           headerStyle: {
             backgroundColor: Colors.white,
@@ -59,7 +69,6 @@ function RootNavigator() {
         name="SelectCategory"
         component={SelectCategoryScreen}
         options={{
-          headerShadowVisible: false,
           title: '',
           headerStyle: {
             backgroundColor: Colors.white,
@@ -76,13 +85,7 @@ function RootNavigator() {
           ),
         }}
       />
-      <Stack.Screen
-        name="AddCategory"
-        component={AddCategoryScreen}
-        options={{
-          headerShadowVisible: false,
-        }}
-      />
+      <Stack.Screen name="AddCategory" component={AddCategoryScreen} />
     </Stack.Navigator>
   );
 }
