@@ -24,7 +24,7 @@ import {RootStackScreenProps} from '../types';
 
 const ToDoList = [
   {
-    title: '빨래/세탁',
+    title: '의류',
     data: [
       {
         todo: '세탁기 돌리기',
@@ -39,7 +39,17 @@ const ToDoList = [
     ],
   },
   {
-    title: '쓰레기버리기',
+    title: '청소',
+    data: [
+      {
+        todo: '거실 청소',
+        who: '아들',
+        done: true,
+      },
+    ],
+  },
+  {
+    title: '쓰레기 배출',
     data: [
       {
         todo: '재활용 쓰레기 분리수거',
@@ -49,16 +59,6 @@ const ToDoList = [
       {
         todo: '음식물 쓰레기 버리기',
         who: '엄마',
-        done: true,
-      },
-    ],
-  },
-  {
-    title: '청소',
-    data: [
-      {
-        todo: '거실 청소',
-        who: '아들',
         done: true,
       },
     ],
