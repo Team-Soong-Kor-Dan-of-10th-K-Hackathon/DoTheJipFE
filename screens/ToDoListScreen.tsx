@@ -13,11 +13,14 @@ import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import ToDo from '../components/ToDo';
 
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ReactNativeCalendarStrip from 'react-native-calendar-strip';
 import * as React from 'react';
 import {useState} from 'react';
 
 import AddIcon from '../assets/icons/add.svg';
+import { RootStackScreenProps } from '../types';
 
 const ToDoList = [
   {
@@ -74,7 +77,7 @@ function filterToDoList(list: typeof ToDoList) {
   return filteredToDoList;
 }
 
-export default function ToDoListScreen() {
+export default function ToDoListScreen({navigation} : RootStackScreenProps<'ToDoList'>) {
   const [date, setDate] = useState(new Date());
   const [index, setIndex] = useState(0);
   return (
@@ -265,7 +268,8 @@ export default function ToDoListScreen() {
           backgroundColor: Colors.yellow,
           justifyContent: 'center',
           alignItems: 'center',
-        })}>
+        })}
+        onPress = {()=>navigation.navigate("AddToDoCategoryScreen")}>
         <AddIcon />
       </Pressable>
     </View>
