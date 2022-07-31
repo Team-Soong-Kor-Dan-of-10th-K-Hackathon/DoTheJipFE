@@ -13,11 +13,14 @@ import {
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 
+import CheckBox from '../assets/icons/check.svg';
+
 export default function ToDo(props: {
   todo: string;
   who: string;
   done: boolean;
 }) {
+  const [done, setDone] = useState(props.done);
   const [modalVisible, setModalVisible] = useState(false);
   const panY = useRef(new Animated.Value(Layout.Height)).current;
   const translateY = panY.interpolate({
@@ -72,10 +75,10 @@ export default function ToDo(props: {
         <Animated.View
           style={{
             width: Layout.Width,
-            height: Layout.Height * 0.6,
+            height: Layout.Height * 0.75,
             backgroundColor: Colors.white,
             position: 'absolute',
-            top: Layout.Height * 0.4,
+            top: Layout.Height * 0.25,
             borderTopRightRadius: 20,
             borderTopLeftRadius: 20,
             paddingHorizontal: Layout.Width * 0.07,
@@ -188,24 +191,21 @@ export default function ToDo(props: {
           </Text>
         </View>
         <Pressable
+          onPress={() => setDone(!done)}
           style={({pressed}) => ({
             opacity: pressed ? 0.5 : 1,
+            borderRadius: 5,
+            backgroundColor: done
+              ? props.who == '엄마'
+                ? Colors.purple
+                : props.who == '아빠'
+                ? Colors.skyblue
+                : props.who == '딸'
+                ? Colors.pink
+                : Colors.green
+              : Colors.darkGray,
           })}>
-          {/* <FontAwesome
-                  name="check-square"
-                  size={24}
-                  color={
-                    props.done
-                      ? props.who == "엄마"
-                        ? Colors.purple
-                        : props.who == "아빠"
-                        ? Colors.skyblue
-                        : props.who == "딸"
-                        ? Colors.pink
-                        : Colors.green
-                      : Colors.darkGray
-                  }
-                /> */}
+          <CheckBox />
         </Pressable>
       </Pressable>
     </Fragment>
