@@ -13,6 +13,7 @@ import GraphIcon from './assets/icons/graph.svg';
 import HamburgerIcon from './assets/icons/hamburger.svg';
 import Layout from './constants/Layout';
 import Colors from './constants/Colors';
+import AddTODoScreen from './screens/AddToDoScreen';
 
 export default function Navigation() {
   return (
@@ -29,6 +30,9 @@ function RootNavigator() {
     <Stack.Navigator
       screenOptions={{
         headerShadowVisible: false,
+        headerStyle: {
+          backgroundColor: Colors.white,
+        },
       }}>
       <Stack.Screen
         name="SignIn"
@@ -42,9 +46,6 @@ function RootNavigator() {
         component={ToDoListScreen}
         options={{
           title: '',
-          headerStyle: {
-            backgroundColor: Colors.white,
-          },
           headerLeft: () => (
             <Pressable
               style={({pressed}) => ({
@@ -69,10 +70,6 @@ function RootNavigator() {
         name="SelectCategory"
         component={SelectCategoryScreen}
         options={{
-          title: '',
-          headerStyle: {
-            backgroundColor: Colors.white,
-          },
           headerTitle: () => (
             <Text
               style={{
@@ -84,6 +81,22 @@ function RootNavigator() {
             </Text>
           ),
         }}
+      />
+      <Stack.Screen
+        name="AddToDo"
+        component={AddTODoScreen}
+        options={screen => ({
+          headerTitle: () => (
+            <Text
+              style={{
+                color: Colors.black,
+                fontSize: Layout.FontScale * 28,
+                fontWeight: 'bold',
+              }}>
+              {screen.route.params.category}
+            </Text>
+          ),
+        })}
       />
       <Stack.Screen name="AddCategory" component={AddCategoryScreen} />
     </Stack.Navigator>

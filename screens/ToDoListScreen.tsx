@@ -13,8 +13,6 @@ import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import ToDo from '../components/ToDo';
 
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import ReactNativeCalendarStrip from 'react-native-calendar-strip';
 import * as React from 'react';
 import {useState} from 'react';
