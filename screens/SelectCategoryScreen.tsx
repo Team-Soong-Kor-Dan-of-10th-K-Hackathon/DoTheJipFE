@@ -90,7 +90,9 @@ export default function SelectCategoryScreen({
             color={item.color}
             detail={item.detail}
             icon={item.icon}
-            onPress={() => navigation.navigate('AddToDo')}
+            onPress={() =>
+              navigation.navigate('AddToDo', {category: item.title})
+            }
           />
         ))}
         <Pressable

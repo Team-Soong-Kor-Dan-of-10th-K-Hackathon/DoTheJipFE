@@ -20,10 +20,10 @@ import {RootStackScreenProps} from '../types';
 
 export default function AddToDoScreen({
   navigation,
+  route,
 }: RootStackScreenProps<'AddToDo'>) {
   const [date, setDate] = useState(new Date());
   const [openDate, setDateOpen] = useState(false);
-  const [TodoVisible, setTodoVisible] = useState(false);
   const [open, setOpen] = useState(false);
   const [openUser, setUserOpen] = useState(false);
   const [openTodo, setTodoOpen] = useState(false);
@@ -105,10 +105,6 @@ export default function AddToDoScreen({
   return (
     <View style={styles.container}>
       <Text style={{fontSize: 30, marginVertical: 39}}>상세설정</Text>
-      {/* <TouchableOpacity ref={DropdownButton} style={{height:50,width:'90%'} } onPress={TodoToggleDrop}>
-            <Text style={{flex:1}}>선택</Text>
-            {renderTodoToggle()}
-        </TouchableOpacity> */}
       <DropDownPicker
         open={openTodo}
         value={valueTodo}
