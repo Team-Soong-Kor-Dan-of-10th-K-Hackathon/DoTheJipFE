@@ -1,5 +1,5 @@
 import 'moment/locale/ko';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
 import moment from 'moment';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
@@ -104,7 +104,15 @@ export default function AddToDoScreen({
   }, []);
   return (
     <View style={styles.container}>
-      <Text style={{fontSize: 30, marginVertical: 39}}>상세설정</Text>
+      <Text
+        style={{
+          color: Colors.black,
+          fontSize: Layout.FontScale * 24,
+          fontWeight: 'normal',
+          marginVertical: Layout.Height * 0.03,
+        }}>
+        상세설정
+      </Text>
       <DropDownPicker
         open={openTodo}
         value={valueTodo}
@@ -115,41 +123,48 @@ export default function AddToDoScreen({
         setItems={setTodoItems}
         style={{
           width: Layout.Width * 0.86,
-          backgroundColor: 'white',
-          borderColor: 'white',
-          borderBottomColor: '#EBEBEB',
-          marginBottom: 18,
+          backgroundColor: Colors.white,
+          borderWidth: 0,
+          borderBottomWidth: 2,
+          borderBottomColor: Colors.darkGray,
+          marginBottom: Layout.Height * 0.02,
         }}
         placeholder={'할 일 직접 입력'}
-        textStyle={{fontSize: 18}}
+        placeholderStyle={{
+          color: Colors.black,
+          fontSize: Layout.FontScale * 18,
+        }}
+        textStyle={{
+          color: Colors.black,
+          fontSize: Layout.FontScale * 18,
+        }}
         zIndex={3000}
         zIndexInverse={1000}
         dropDownContainerStyle={{
           backgroundColor: 'white',
+          borderColor: Colors.darkGray,
         }}
       />
-      <TouchableOpacity
+      <Pressable
         onPress={() => {
           setDateOpen(true);
-        }}>
-        <View
-          style={{
-            width: Layout.Width * 0.86,
-            height: 48,
-            backgroundColor: Colors.lightGray,
-            marginBottom: 18,
-            borderRadius: 5,
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-            padding: 10,
-            flexDirection: 'row',
-          }}>
-          <Calendar style={{width: 24, height: 24, marginRight: 15}} />
-          <Text style={{fontSize: 18}}>
-            {moment(date).format('YYYY-MM-DD')}
-          </Text>
-        </View>
-      </TouchableOpacity>
+        }}
+        style={({pressed}) => ({
+          opacity: pressed ? 0.5 : 1,
+
+          width: Layout.Width * 0.86,
+          height: 48,
+          backgroundColor: Colors.lightGray,
+          marginBottom: 18,
+          borderRadius: 5,
+          justifyContent: 'flex-start',
+          alignItems: 'center',
+          padding: 10,
+          flexDirection: 'row',
+        })}>
+        <Calendar style={{width: 24, height: 24, marginRight: 15}} />
+        <Text style={{fontSize: 18}}>{moment(date).format('YYYY-MM-DD')}</Text>
+      </Pressable>
       <DatePicker
         modal
         date={date}
