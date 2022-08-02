@@ -13,6 +13,7 @@ import GraphIcon from './assets/icons/graph.svg';
 import HamburgerIcon from './assets/icons/hamburger.svg';
 import Layout from './constants/Layout';
 import Colors from './constants/Colors';
+import AddTODoScreen from './screens/AddToDoScreen';
 
 export default function Navigation() {
   return (
@@ -85,6 +86,7 @@ function RootNavigator() {
           ),
         }}
       />
+      <Stack.Screen name="AddToDo" component={AddTODoScreen} />
       <Stack.Screen name="AddCategory" component={AddCategoryScreen} />
     </Stack.Navigator>
   );
