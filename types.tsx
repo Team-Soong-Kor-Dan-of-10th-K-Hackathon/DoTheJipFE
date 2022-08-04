@@ -12,6 +12,7 @@ export type RootStackParamList = {
   SelectCategory: undefined;
   AddCategory: undefined;
   AddToDo: {category: string};
+  StatisticalData: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
