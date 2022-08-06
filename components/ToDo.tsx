@@ -14,46 +14,55 @@ import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 
 import CheckBox from '../assets/icons/check.svg';
+import { ITodoTypes } from '../recoil/todo';
+import { SetterOrUpdater } from 'recoil';
 
-export default function ToDo(props: {
+interface PropTypes {
+  id: number;
   todo: string;
   who: string;
   done: boolean;
-}) {
-  const [done, setDone] = useState(props.done);
+  onDone: (id: number) => void;
+  onDelete: (id: number) => void;
+  todos: ITodoTypes[];
+  setTodos: SetterOrUpdater<ITodoTypes[]>;
+}
+
+export default function ToDo({ id, todo, who, done, onDone, onDelete, todos, setTodos}: PropTypes) {
+  //const [done, setDone] = useState(props.done);
   const [modalVisible, setModalVisible] = useState(false);
-  const panY = useRef(new Animated.Value(Layout.Height)).current;
-  const translateY = panY.interpolate({
-    inputRange: [-1, 0, 1],
-    outputRange: [0, 0, 1],
-  });
-  const resetBottomSheet = Animated.timing(panY, {
-    toValue: 0,
-    duration: 300,
-    useNativeDriver: true,
-  });
+  // const panY = useRef(new Animated.Value(Layout.Height)).current;
+  // const translateY = panY.interpolate({
+  //   inputRange: [-1, 0, 1],
+  //   outputRange: [0, 0, 1],
+  // });
+  // const resetBottomSheet = Animated.timing(panY, {
+  //   toValue: 0,
+  //   duration: 300,
+  //   useNativeDriver: true,
+  // });
 
-  const closeBottomSheet = Animated.timing(panY, {
-    toValue: Layout.Height,
-    duration: 300,
-    useNativeDriver: true,
-  });
+  // const closeBottomSheet = Animated.timing(panY, {
+  //   toValue: Layout.Height,
+  //   duration: 300,
+  //   useNativeDriver: true,
+  // });
 
-  const panResponders = useRef(
-    PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onMoveShouldSetPanResponder: () => false,
-      onPanResponderMove: (event, gestureState) => {
-        if (gestureState.dy > 0 && gestureState.vy > 2) {
-          closeBottomSheet.start(() => setModalVisible(false));
-        } else resetBottomSheet.start();
-      },
-    }),
-  ).current;
+  // const panResponders = useRef(
+  //   PanResponder.create({
+  //     onStartShouldSetPanResponder: () => true,
+  //     onMoveShouldSetPanResponder: () => false,
+  //     onPanResponderMove: (event, gestureState) => {
+  //       if (gestureState.dy > 0 && gestureState.vy > 2) {
+  //         closeBottomSheet.start(() => setModalVisible(false));
+  //       } else resetBottomSheet.start();
+  //     },
+  //   }),
+  // ).current;
 
-  useEffect(() => {
-    if (modalVisible) resetBottomSheet.start();
-  }, [modalVisible]);
+  // useEffect(() => {
+  //   if (modalVisible) resetBottomSheet.start();
+  // }, [modalVisible]);
 
   return (
     <Fragment>
@@ -72,7 +81,7 @@ export default function ToDo(props: {
             }}
           />
         </TouchableWithoutFeedback>
-        <Animated.View
+        <View
           style={{
             width: Layout.Width,
             height: Layout.Height * 0.75,
@@ -82,9 +91,10 @@ export default function ToDo(props: {
             borderTopRightRadius: 20,
             borderTopLeftRadius: 20,
             paddingHorizontal: Layout.Width * 0.07,
-            transform: [{translateY: translateY}],
+           // transform: [{translateY: translateY}],
           }}
-          {...panResponders.panHandlers}>
+         /* {...panResponders.panHandlers}>*/
+         >
           <Pressable
             style={{
               height: Layout.Height * 0.037,
@@ -113,7 +123,7 @@ export default function ToDo(props: {
                 fontSize: Layout.FontScale * 18,
                 color: Colors.black,
               }}>
-              {props.todo}
+              {todo}
             </Text>
             <View
               style={{
@@ -128,11 +138,11 @@ export default function ToDo(props: {
                   height: Layout.Width * 0.06,
                   borderRadius: Layout.Width * 0.06,
                   backgroundColor:
-                    props.who == '엄마'
+                    who == '엄마'
                       ? Colors.purple
-                      : props.who == '아빠'
+                      : who == '아빠'
                       ? Colors.skyblue
-                      : props.who == '딸'
+                      : who == '딸'
                       ? Colors.pink
                       : Colors.green,
                 }}
@@ -142,11 +152,12 @@ export default function ToDo(props: {
                   fontSize: Layout.FontScale * 18,
                   color: Colors.black,
                 }}>
-                {props.who}
+                {who}
               </Text>
             </View>
           </View>
-        </Animated.View>
+          </View>
+       {/*</Animated.View>*/}
       </Modal>
 
       <Pressable
@@ -173,11 +184,11 @@ export default function ToDo(props: {
               height: Layout.Width * 0.06,
               borderRadius: Layout.Width * 0.06,
               backgroundColor:
-                props.who == '엄마'
+                who == '엄마'
                   ? Colors.purple
-                  : props.who == '아빠'
+                  : who == '아빠'
                   ? Colors.skyblue
-                  : props.who == '딸'
+                  : who == '딸'
                   ? Colors.pink
                   : Colors.green,
             }}
@@ -187,20 +198,20 @@ export default function ToDo(props: {
               color: Colors.black,
               fontSize: Layout.FontScale * 18,
             }}>
-            {props.todo}
+            {todo}
           </Text>
         </View>
         <Pressable
-          onPress={() => setDone(!done)}
+          onPress={() => onDone(id)}
           style={({pressed}) => ({
             opacity: pressed ? 0.5 : 1,
             borderRadius: 5,
             backgroundColor: done
-              ? props.who == '엄마'
+              ? who == '엄마'
                 ? Colors.purple
-                : props.who == '아빠'
+                : who == '아빠'
                 ? Colors.skyblue
-                : props.who == '딸'
+                : who == '딸'
                 ? Colors.pink
                 : Colors.green
               : Colors.darkGray,
