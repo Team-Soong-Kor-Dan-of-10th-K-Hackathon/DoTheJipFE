@@ -7,7 +7,7 @@ export default function ProfileIcon(props: {color: ColorValue}) {
   return (
     <View
       style={{
-        marginRight: Layout.Width * 0.03,
+        marginRight: Layout.Width * 0.046,
         width: Layout.Width * 0.06,
         height: Layout.Width * 0.06,
         borderRadius: Layout.Width * 0.06,

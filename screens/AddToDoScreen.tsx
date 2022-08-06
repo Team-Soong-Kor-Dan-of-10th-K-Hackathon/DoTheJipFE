@@ -132,15 +132,7 @@ export default function AddToDoScreen({
                   style={{
                     flexDirection: 'row',
                   }}>
-                  <View
-                    style={{
-                      marginRight: Layout.Width * 0.03,
-                      width: Layout.Width * 0.06,
-                      height: Layout.Width * 0.06,
-                      borderRadius: Layout.Width * 0.06,
-                      backgroundColor: item.color,
-                    }}
-                  />
+                  <ProfileIcon color={item.color} />
                   <Text
                     style={{
                       fontSize: Layout.FontScale * 18,
@@ -170,10 +162,7 @@ export default function AddToDoScreen({
             }}
             style={({pressed}) => ({
               position: 'absolute',
-              bottom:
-                Layout.Height -
-                Dimensions.get('window').height -
-                StatusBar.currentHeight,
+              bottom: Layout.AndroidBottomBarHeight,
               opacity: pressed ? 0.5 : 1,
               width: Layout.Width,
               height: Layout.Height * 0.06,
@@ -210,19 +199,17 @@ export default function AddToDoScreen({
           }}
           style={({pressed}) => ({
             opacity: pressed ? 0.5 : 1,
-
             width: Layout.Width * 0.86,
-            height: 48,
+            height: Layout.Height * 0.05,
             backgroundColor: Colors.lightGray,
             marginBottom: 18,
             borderRadius: 5,
-            justifyContent: 'flex-start',
             alignItems: 'center',
-            padding: 10,
+            paddingHorizontal: Layout.Width * 0.03,
             flexDirection: 'row',
           })}>
-          <Calendar style={{width: 24, height: 24, marginRight: 15}} />
-          <Text style={{fontSize: 18}}>
+          <Calendar style={{marginRight: Layout.Width * 0.046}} />
+          <Text style={{color: Colors.black, fontSize: 18}}>
             {moment(date).format('YYYY-MM-DD')}
           </Text>
         </Pressable>
@@ -244,24 +231,15 @@ export default function AddToDoScreen({
           style={({pressed}) => ({
             opacity: pressed ? 0.5 : 1,
             width: Layout.Width * 0.86,
-            height: 48,
+            height: Layout.Height * 0.05,
             backgroundColor: Colors.lightGray,
             marginBottom: 18,
             borderRadius: 5,
-            justifyContent: 'flex-start',
             alignItems: 'center',
-            padding: 10,
+            paddingHorizontal: Layout.Width * 0.03,
             flexDirection: 'row',
           })}>
-          <View
-            style={{
-              marginRight: Layout.Width * 0.03,
-              width: Layout.Width * 0.06,
-              height: Layout.Width * 0.06,
-              borderRadius: Layout.Width * 0.06,
-              backgroundColor: color,
-            }}
-          />
+          <ProfileIcon color={color} />
           <Text
             style={{
               color: who == '담당자' ? Colors.deepGray : Colors.black,
@@ -273,13 +251,15 @@ export default function AddToDoScreen({
         <Pressable
           style={{
             width: Layout.Width * 0.86,
-            height: Layout.Height * 0.056,
+            height: Layout.Height * 0.05,
             backgroundColor: Colors.lightGray,
             marginBottom: 18,
-            padding: 10,
+            borderRadius: 5,
+            paddingHorizontal: Layout.Width * 0.03,
             flexDirection: 'row',
+            alignItems: 'center',
           }}>
-          <Alarm style={{marginRight: 18}} />
+          <Alarm style={{marginRight: Layout.Width * 0.046}} />
           <Text
             style={{
               color: Colors.deepGray,
@@ -291,13 +271,15 @@ export default function AddToDoScreen({
         <Pressable
           style={{
             width: Layout.Width * 0.86,
-            height: Layout.Height * 0.056,
+            height: Layout.Height * 0.05,
             backgroundColor: Colors.lightGray,
             marginBottom: 18,
-            padding: 10,
+            borderRadius: 5,
+            paddingHorizontal: Layout.Width * 0.03,
             flexDirection: 'row',
+            alignItems: 'center',
           }}>
-          <Repeat style={{marginRight: 18}} />
+          <Repeat style={{marginRight: Layout.Width * 0.046}} />
           <Text
             style={{
               color: Colors.deepGray,
@@ -309,13 +291,15 @@ export default function AddToDoScreen({
         <Pressable
           style={{
             width: Layout.Width * 0.86,
-            height: Layout.Height * 0.056,
+            height: Layout.Height * 0.05,
             backgroundColor: Colors.lightGray,
             marginBottom: 18,
-            padding: 10,
+            borderRadius: 5,
+            paddingHorizontal: Layout.Width * 0.03,
             flexDirection: 'row',
+            alignItems: 'center',
           }}>
-          <Coupon style={{marginRight: 18}} />
+          <Coupon style={{marginRight: Layout.Width * 0.046}} />
           <Text
             style={{
               color: Colors.deepGray,
@@ -327,14 +311,19 @@ export default function AddToDoScreen({
         <Pressable
           style={{
             width: Layout.Width * 0.86,
-            height: Layout.Height * 0.056,
+            height: Layout.Height * 0.05,
             backgroundColor: Colors.lightGray,
             marginBottom: 18,
-            marginRight: 18,
-            padding: 10,
+            borderRadius: 5,
+            paddingHorizontal: Layout.Width * 0.03,
             flexDirection: 'row',
+            alignItems: 'center',
           }}>
-          <Memo style={{marginRight: 18}} />
+          <Memo
+            style={{
+              marginRight: Layout.Width * 0.046,
+            }}
+          />
           <Text
             style={{
               color: Colors.deepGray,
@@ -344,6 +333,50 @@ export default function AddToDoScreen({
           </Text>
         </Pressable>
       </View>
+      <Pressable
+        onPress={() => navigation.navigate('ToDoList')}
+        style={({pressed}) => ({
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          opacity: pressed ? 0.5 : 1,
+          width: Layout.Width * 0.5,
+          height: Layout.Height * 0.06,
+          backgroundColor: Colors.lightGray,
+          justifyContent: 'center',
+          alignItems: 'center',
+        })}>
+        <Text
+          style={{
+            color: Colors.black,
+            fontSize: Layout.FontScale * 18,
+            fontWeight: 'bold',
+          }}>
+          취소
+        </Text>
+      </Pressable>
+      <Pressable
+        onPress={() => navigation.navigate('ToDoList')}
+        style={({pressed}) => ({
+          position: 'absolute',
+          bottom: 0,
+          right: 0,
+          opacity: pressed ? 0.5 : 1,
+          width: Layout.Width * 0.5,
+          height: Layout.Height * 0.06,
+          backgroundColor: Colors.yellow,
+          justifyContent: 'center',
+          alignItems: 'center',
+        })}>
+        <Text
+          style={{
+            color: Colors.black,
+            fontSize: Layout.FontScale * 18,
+            fontWeight: 'bold',
+          }}>
+          저장
+        </Text>
+      </Pressable>
     </>
   );
 }
