@@ -53,18 +53,18 @@ export const todosState = atom<ITodoTypes[]>({
       },
   
       {  
-        title : '의류',
+        title : '쓰레기 배출',
         data:[
         {
         id: 2,
         todo: '자유롭게',
-        who: '아빠',
+        who: '아들',
         done: false,
         }]
       },
   
       {
-        title: '의류',
+        title: '청소',
         data:[
         {
         id: 3,
