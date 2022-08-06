@@ -9,6 +9,9 @@ import {
   Modal,
 } from 'react-native';
 
+import { useRecoilState } from 'recoil';
+import { todosState, ITodoTypes, ITodoitemTypes } from '../recoil/todo';
+
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import ToDo from '../components/ToDo';
@@ -20,52 +23,52 @@ import {useState} from 'react';
 import AddIcon from '../assets/icons/add.svg';
 import {RootStackScreenProps} from '../types';
 
-const ToDoList = [
-  {
-    title: '의류',
-    data: [
-      {
-        todo: '세탁기 돌리기',
-        who: '아빠',
-        done: false,
-      },
-      {
-        todo: '빨래 널기',
-        who: '엄마',
-        done: true,
-      },
-    ],
-  },
-  {
-    title: '청소',
-    data: [
-      {
-        todo: '거실 청소',
-        who: '아들',
-        done: true,
-      },
-    ],
-  },
-  {
-    title: '쓰레기 배출',
-    data: [
-      {
-        todo: '재활용 쓰레기 분리수거',
-        who: '딸',
-        done: false,
-      },
-      {
-        todo: '음식물 쓰레기 버리기',
-        who: '엄마',
-        done: true,
-      },
-    ],
-  },
-];
+// const ToDoList = [
+//   {
+//     title: '의류',
+//     data: [
+//       {
+//         todo: '세탁기 돌리기',
+//         who: '아빠',
+//         done: false,
+//       },
+//       {
+//         todo: '빨래 널기',
+//         who: '엄마',
+//         done: true,
+//       },
+//     ],
+//   },
+//   {
+//     title: '청소',
+//     data: [
+//       {
+//         todo: '거실 청소',
+//         who: '아들',
+//         done: true,
+//       },
+//     ],
+//   },
+//   {
+//     title: '쓰레기 배출',
+//     data: [
+//       {
+//         todo: '재활용 쓰레기 분리수거',
+//         who: '딸',
+//         done: false,
+//       },
+//       {
+//         todo: '음식물 쓰레기 버리기',
+//         who: '엄마',
+//         done: true,
+//       },
+//     ],
+//   },
+// ];
 
-function filterToDoList(list: typeof ToDoList) {
+function filterToDoList(list : ITodoTypes[]) {
   const filteredToDoList = [];
-  for (var i = 0; i < ToDoList.length; i++) {
+  for (var i = 0; i < list.length; i++) {
     if (list[i].data.filter(item => item.who == '아들').length > 0)
       filteredToDoList.push({
         title: list[i].title,
@@ -80,6 +83,29 @@ export default function ToDoListScreen({
 }: RootStackScreenProps<'ToDoList'>) {
   const [date, setDate] = useState(new Date());
   const [index, setIndex] = useState(0);
+  const [todos, setTodos] = useRecoilState<ITodoTypes[]>(todosState);
+ 
+
+  const onDone = React.useCallback((id: number): void => {
+    setTodos(todos.map((todo: ITodoTypes) => {
+      // 매개변수로 받은 id와 같은 객체만 완료상태 업데이트
+      const datas = todo.data.map((item:ITodoitemTypes)=>{
+        return item.id === id ? {...item, done: !item.done}: item;
+      });
+    return {title:todo.title, data:datas};
+    }));
+  }, [setTodos, todos]);
+
+  const onDelete = React.useCallback((id: number)  => {
+    // 매개변수로 받은 id와 동일하지 않는 객체들만 필터링
+    setTodos(
+      todos.map((todo:ITodoTypes)=>{
+        const datas = todo.data.filter((item : ITodoitemTypes)=>item.id !== id);
+        return {title : todo.title, data : datas};
+      })
+    );
+  }, [setTodos, todos]);
+
   return (
     <View style={styles.container}>
       <Text
@@ -228,7 +254,7 @@ export default function ToDoListScreen({
           setIndex(newIndex);
         }}>
         <SectionList
-          sections={ToDoList}
+          sections={todos}
           renderSectionHeader={({section: {title}}) => (
             <Text
               style={{
@@ -240,11 +266,11 @@ export default function ToDoListScreen({
             </Text>
           )}
           renderItem={({item}) => (
-            <ToDo todo={item.todo} who={item.who} done={item.done} />
+            <ToDo key = {item.id} id = {item.id} todo={item.todo} who={item.who}  onDone = {onDone} onDelete ={onDelete} todos = {todos} done={item.done} setTodos={setTodos}/>
           )}
         />
         <SectionList
-          sections={filterToDoList(ToDoList)}
+          sections={filterToDoList(todos)}
           renderSectionHeader={({section: {title}}) => (
             <Text
               style={{color: Colors.black, fontSize: Layout.FontScale * 18}}>
@@ -252,7 +278,7 @@ export default function ToDoListScreen({
             </Text>
           )}
           renderItem={({item}) => (
-            <ToDo todo={item.todo} who={item.who} done={item.done} />
+            <ToDo key={item.id} id = {item.id} todo={item.todo} who={item.who} onDone = {onDone} onDelete ={onDelete} todos = {todos} done={item.done} setTodos={setTodos}/>
           )}
         />
       </ScrollView>
