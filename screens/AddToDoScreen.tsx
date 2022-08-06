@@ -6,8 +6,9 @@ import {
   View,
   Modal,
   TouchableWithoutFeedback,
-  Dimensions,
-  StatusBar,
+  TextInput,
+  ScrollView,
+  FlatList,
 } from 'react-native';
 import moment from 'moment';
 import Colors from '../constants/Colors';
@@ -23,8 +24,12 @@ import Alarm from '../assets/icons/alarm.svg';
 import Check from '../assets/icons/check.svg';
 import Calendar from '../assets/icons/calendar.svg';
 import ProfileIcon from '../components/ProfileIcon';
+import ChevronDown from '../assets/icons/chevron-down.svg';
+import ChevronUp from '../assets/icons/chevron-up.svg';
 
 import DatePicker from 'react-native-date-picker';
+import Collapsible from 'react-native-collapsible';
+
 import {RootStackScreenProps} from '../types';
 
 export default function AddToDoScreen({
@@ -42,6 +47,9 @@ export default function AddToDoScreen({
   });
   const [color, setColor] = useState(Colors.darkGray);
   const [who, setWho] = useState('담당자');
+  const [title, setTitle] = useState('');
+  const [titleCollapsed, setTitleCollapsed] = useState(true);
+  const [titleFieldFocused, setTitleFieldFocused] = useState(false);
   const [whoModalVisible, setWhoModalVisible] = useState(false);
   const [disabled, setDisabled] = useState(selectedUser.label === '');
   const users = [
@@ -75,6 +83,15 @@ export default function AddToDoScreen({
     },
   ];
 
+  const titles = [
+    '직접 입력',
+    '빨래 널기',
+    '빨래 개기',
+    '세탁기 돌리기',
+    '다림질 하기',
+    '바느질 하기',
+    '수선집 다녀오기',
+  ];
   return (
     <>
       <Modal
@@ -192,7 +209,71 @@ export default function AddToDoScreen({
           }}>
           상세설정
         </Text>
+        <View
+          style={{
+            marginBottom: Layout.Height * 0.03,
+          }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              height: Layout.Height * 0.05,
+              borderBottomWidth: 2,
+              borderBottomColor: titleFieldFocused
+                ? Colors.yellow
+                : Colors.darkGray,
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            <TextInput
+              value={title}
+              onChangeText={text => setTitle(text)}
+              placeholder="할 일 제목을 입력하세요."
+              placeholderTextColor={Colors.deepGray}
+              style={{
+                width: Layout.Width * 0.75,
+                color: Colors.black,
+                fontSize: Layout.FontScale * 18,
+              }}
+              onFocus={() => setTitleFieldFocused(true)}
+              onBlur={() => setTitleFieldFocused(false)}
+              returnKeyType="next"
+            />
 
+            <Pressable
+              onPress={() => setTitleCollapsed(!titleCollapsed)}
+              style={({pressed}) => ({
+                opacity: pressed ? 0.5 : 1,
+                width: Layout.Width * 0.1,
+                alignItems: 'flex-end',
+              })}>
+              {titleCollapsed ? <ChevronDown /> : <ChevronUp />}
+            </Pressable>
+          </View>
+          <Collapsible collapsed={titleCollapsed}>
+            <FlatList
+              data={titles}
+              renderItem={item => (
+                <Pressable
+                  onPress={() => {
+                    if (item.item === '직접 입력') setTitle(title);
+                    else setTitle(item.item);
+                    setTitleCollapsed(!titleCollapsed);
+                  }}
+                  style={({pressed}) => ({
+                    opacity: pressed ? 0.5 : 1,
+                  })}>
+                  <Text
+                    style={{
+                      color: Colors.black,
+                      fontSize: Layout.FontScale * 18,
+                    }}>
+                    {item.item}
+                  </Text>
+                </Pressable>
+              )}
+            />
+          </Collapsible>
+        </View>
         <Pressable
           onPress={() => {
             setDateOpen(true);
