@@ -22,6 +22,7 @@ import Coupon from '../assets/icons/coupon.svg';
 import Alarm from '../assets/icons/alarm.svg';
 import Check from '../assets/icons/check.svg';
 import Calendar from '../assets/icons/calendar.svg';
+import ProfileIcon from '../components/ProfileIcon';
 
 import DatePicker from 'react-native-date-picker';
 import {RootStackScreenProps} from '../types';
@@ -37,17 +38,7 @@ export default function AddToDoScreen({
     label: '',
     value: 0,
     color: Colors.darkGray,
-    icon: () => (
-      <View
-        style={{
-          marginRight: Layout.Width * 0.03,
-          width: Layout.Width * 0.06,
-          height: Layout.Width * 0.06,
-          borderRadius: Layout.Width * 0.06,
-          backgroundColor: Colors.darkGray,
-        }}
-      />
-    ),
+    icon: () => <ProfileIcon color={Colors.darkGray} />,
   });
   const [color, setColor] = useState(Colors.darkGray);
   const [who, setWho] = useState('담당자');
@@ -59,68 +50,28 @@ export default function AddToDoScreen({
       label: '김아빠',
       value: 0,
       color: Colors.skyblue,
-      icon: () => (
-        <View
-          style={{
-            marginRight: Layout.Width * 0.03,
-            width: Layout.Width * 0.06,
-            height: Layout.Width * 0.06,
-            borderRadius: Layout.Width * 0.06,
-            backgroundColor: Colors.skyblue,
-          }}
-        />
-      ),
+      icon: () => <ProfileIcon color={Colors.skyblue} />,
     },
     {
       key: '마미',
       label: '마미',
       value: 1,
       color: Colors.purple,
-      icon: () => (
-        <View
-          style={{
-            marginRight: Layout.Width * 0.03,
-            width: Layout.Width * 0.06,
-            height: Layout.Width * 0.06,
-            borderRadius: Layout.Width * 0.06,
-            backgroundColor: Colors.purple,
-          }}
-        />
-      ),
+      icon: () => <ProfileIcon color={Colors.purple} />,
     },
     {
       key: '김공주',
       label: '김공주',
       value: 1,
       color: Colors.pink,
-      icon: () => (
-        <View
-          style={{
-            marginRight: Layout.Width * 0.03,
-            width: Layout.Width * 0.06,
-            height: Layout.Width * 0.06,
-            borderRadius: Layout.Width * 0.06,
-            backgroundColor: Colors.pink,
-          }}
-        />
-      ),
+      icon: () => <ProfileIcon color={Colors.pink} />,
     },
     {
       key: '막냉이',
       label: '막냉이',
       value: 1,
       color: Colors.green,
-      icon: () => (
-        <View
-          style={{
-            marginRight: Layout.Width * 0.03,
-            width: Layout.Width * 0.06,
-            height: Layout.Width * 0.06,
-            borderRadius: Layout.Width * 0.06,
-            backgroundColor: Colors.green,
-          }}
-        />
-      ),
+      icon: () => <ProfileIcon color={Colors.green} />,
     },
   ];
 
