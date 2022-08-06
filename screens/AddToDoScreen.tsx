@@ -36,7 +36,7 @@ export default function AddToDoScreen({
     key: '',
     label: '',
     value: 0,
-    color: '#fff',
+    color: Colors.darkGray,
     icon: () => (
       <View
         style={{
@@ -52,6 +52,7 @@ export default function AddToDoScreen({
   const [color, setColor] = useState(Colors.darkGray);
   const [who, setWho] = useState('담당자');
   const [whoModalVisible, setWhoModalVisible] = useState(false);
+  const [disabled, setDisabled] = useState(selectedUser.label === '');
   const users = [
     {
       key: '김아빠',
@@ -165,7 +166,10 @@ export default function AddToDoScreen({
             }}>
             {users.map(item => (
               <Pressable
-                onPress={() => setSelectedUser(item)}
+                onPress={() => {
+                  setSelectedUser(item);
+                  setDisabled(false);
+                }}
                 style={{
                   height: Layout.Height * 0.04,
                   flexDirection: 'row',
@@ -207,6 +211,7 @@ export default function AddToDoScreen({
             ))}
           </View>
           <Pressable
+            disabled={disabled}
             onPress={() => {
               setWhoModalVisible(false);
               setWho(selectedUser.label);
