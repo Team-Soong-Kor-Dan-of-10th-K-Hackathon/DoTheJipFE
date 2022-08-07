@@ -1,21 +1,20 @@
 import * as React from 'react';
-import {useState, useEffect, useRef, Fragment} from 'react';
+import {useState} from 'react';
 import {
   Pressable,
   Text,
   View,
   Modal,
   TouchableWithoutFeedback,
-  Animated,
-  PanResponder,
+  TextInput,
 } from 'react-native';
 
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 
 import CheckBox from '../assets/icons/check.svg';
-import { ITodoTypes } from '../recoil/todo';
-import { SetterOrUpdater } from 'recoil';
+import {ITodoTypes} from '../recoil/todo';
+import {SetterOrUpdater} from 'recoil';
 
 interface PropTypes {
   id: number;
@@ -28,44 +27,21 @@ interface PropTypes {
   setTodos: SetterOrUpdater<ITodoTypes[]>;
 }
 
-export default function ToDo({ id, todo, who, done, onDone, onDelete, todos, setTodos}: PropTypes) {
-  //const [done, setDone] = useState(props.done);
+export default function ToDo({
+  id,
+  todo,
+  who,
+  done,
+  onDone,
+  onDelete,
+  todos,
+  setTodos,
+}: PropTypes) {
   const [modalVisible, setModalVisible] = useState(false);
-  // const panY = useRef(new Animated.Value(Layout.Height)).current;
-  // const translateY = panY.interpolate({
-  //   inputRange: [-1, 0, 1],
-  //   outputRange: [0, 0, 1],
-  // });
-  // const resetBottomSheet = Animated.timing(panY, {
-  //   toValue: 0,
-  //   duration: 300,
-  //   useNativeDriver: true,
-  // });
-
-  // const closeBottomSheet = Animated.timing(panY, {
-  //   toValue: Layout.Height,
-  //   duration: 300,
-  //   useNativeDriver: true,
-  // });
-
-  // const panResponders = useRef(
-  //   PanResponder.create({
-  //     onStartShouldSetPanResponder: () => true,
-  //     onMoveShouldSetPanResponder: () => false,
-  //     onPanResponderMove: (event, gestureState) => {
-  //       if (gestureState.dy > 0 && gestureState.vy > 2) {
-  //         closeBottomSheet.start(() => setModalVisible(false));
-  //       } else resetBottomSheet.start();
-  //     },
-  //   }),
-  // ).current;
-
-  // useEffect(() => {
-  //   if (modalVisible) resetBottomSheet.start();
-  // }, [modalVisible]);
-
+  const [titleFieldFocused, setTitleFieldFocused] = useState(false);
+  const [titleEditable, setTitleEditable] = useState(false);
   return (
-    <Fragment>
+    <>
       <Modal
         visible={modalVisible}
         animationType={'fade'}
@@ -75,7 +51,7 @@ export default function ToDo({ id, todo, who, done, onDone, onDelete, todos, set
           <View
             style={{
               width: Layout.Width,
-              height: Layout.Height * 0.6,
+              height: Layout.Height,
               backgroundColor: '#000',
               opacity: 0.3,
             }}
@@ -91,73 +67,23 @@ export default function ToDo({ id, todo, who, done, onDone, onDelete, todos, set
             borderTopRightRadius: 20,
             borderTopLeftRadius: 20,
             paddingHorizontal: Layout.Width * 0.07,
-           // transform: [{translateY: translateY}],
-          }}
-         /* {...panResponders.panHandlers}>*/
-         >
-          <Pressable
+            paddingVertical: Layout.Height * 0.05,
+          }}>
+          <TextInput
+            value={todo}
+            placeholder={todo}
+            placeholderTextColor={Colors.deepGray}
+            editable={titleEditable}
             style={{
-              height: Layout.Height * 0.037,
-              backgroundColor: Colors.white,
-              alignItems: 'center',
-              marginTop: 11,
-            }}>
-            <View
-              style={{
-                width: Layout.Width * 0.1,
-                height: 3,
-                backgroundColor: Colors.deepGray,
-              }}></View>
-          </Pressable>
-          <View
-            style={{
-              height: Layout.Height * 0.05,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              borderBottomColor: Colors.darkGray,
-              borderBottomWidth: 1,
-            }}>
-            <Text
-              style={{
-                fontSize: Layout.FontScale * 18,
-                color: Colors.black,
-              }}>
-              {todo}
-            </Text>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-end',
-                alignItems: 'center',
-              }}>
-              <View
-                style={{
-                  marginRight: Layout.Width * 0.03,
-                  width: Layout.Width * 0.06,
-                  height: Layout.Width * 0.06,
-                  borderRadius: Layout.Width * 0.06,
-                  backgroundColor:
-                    who == '엄마'
-                      ? Colors.purple
-                      : who == '아빠'
-                      ? Colors.skyblue
-                      : who == '딸'
-                      ? Colors.pink
-                      : Colors.green,
-                }}
-              />
-              <Text
-                style={{
-                  fontSize: Layout.FontScale * 18,
-                  color: Colors.black,
-                }}>
-                {who}
-              </Text>
-            </View>
-          </View>
-          </View>
-       {/*</Animated.View>*/}
+              width: Layout.Width * 0.75,
+              color: Colors.black,
+              fontSize: Layout.FontScale * 18,
+            }}
+            onFocus={() => setTitleFieldFocused(true)}
+            onBlur={() => setTitleFieldFocused(false)}
+            returnKeyType="next"
+          />
+        </View>
       </Modal>
 
       <Pressable
@@ -219,6 +145,6 @@ export default function ToDo({ id, todo, who, done, onDone, onDelete, todos, set
           <CheckBox />
         </Pressable>
       </Pressable>
-    </Fragment>
+    </>
   );
 }
