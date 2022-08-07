@@ -263,7 +263,11 @@ export default function ToDoListScreen({
           sections={filterToDoList(todos)}
           renderSectionHeader={({section: {title}}) => (
             <Text
-              style={{color: Colors.black, fontSize: Layout.FontScale * 18}}>
+              style={{
+                color: Colors.black,
+                fontSize: Layout.FontScale * 18,
+                fontWeight: 'bold',
+              }}>
               {title}
             </Text>
           )}
