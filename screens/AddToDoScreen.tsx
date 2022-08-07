@@ -7,12 +7,13 @@ import {
   Modal,
   TouchableWithoutFeedback,
   TextInput,
-  ScrollView,
   FlatList,
+  Platform,
 } from 'react-native';
 import moment from 'moment';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
+
 
 import * as React from 'react';
 import {createRef, useRef, useState} from 'react';
@@ -475,13 +476,14 @@ export default function AddToDoScreen({
           right: 0,
           opacity: pressed ? 0.5 : 1,
           width: Layout.Width,
-          height: Layout.Height * 0.06,
+          height: Platform.OS=='ios' ? Layout.Height*0.07 : Layout.Height*0.06,
           backgroundColor:
             title === '' || selectedUser.label === ''
               ? Colors.darkGray
               : Colors.yellow,
           justifyContent: 'center',
           alignItems: 'center',
+          paddingBottom: Platform.OS=='ios' ? Layout.Height*0.01 : 0,
         })}>
         <Text
           style={{
