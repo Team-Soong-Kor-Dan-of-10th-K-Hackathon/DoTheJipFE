@@ -29,6 +29,7 @@ interface PropTypes {
   id: number;
   todo: string;
   who: string;
+  category:string;
   done: boolean;
   onDone: (id: number) => void;
   onDelete: (id: number) => void;
@@ -40,6 +41,7 @@ export default function ToDo({
   id,
   todo,
   who,
+  category,
   done,
   onDone,
   onDelete,
