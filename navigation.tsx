@@ -35,7 +35,7 @@ function RootNavigator() {
         headerStyle: {
           backgroundColor: Colors.white,
         },
-        headerBackTitleVisible: false
+        headerBackTitleVisible: false,
       }}>
       <Stack.Screen
         name="SignIn"
@@ -102,9 +102,7 @@ function RootNavigator() {
           ),
         })}
       />
-      <Stack.Screen
-        name="AddCategory" 
-        component={AddCategoryScreen} />
+      <Stack.Screen name="AddCategory" component={AddCategoryScreen} />
       <Stack.Screen
         name="StatisticalData"
         component={StatisticalDataScreen}
@@ -119,8 +117,7 @@ function RootNavigator() {
               가족 통계
             </Text>
           ),
-        }
-        }
+        }}
       />
     </Stack.Navigator>
   );

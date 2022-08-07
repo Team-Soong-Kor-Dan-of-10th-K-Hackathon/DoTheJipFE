@@ -15,7 +15,7 @@ import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 
 import * as React from 'react';
-import {useState} from 'react';
+import {createRef, useRef, useState} from 'react';
 
 import Repeat from '../assets/icons/repeat.svg';
 import Memo from '../assets/icons/memo.svg';
@@ -31,6 +31,75 @@ import DatePicker from 'react-native-date-picker';
 import Collapsible from 'react-native-collapsible';
 
 import {RootStackScreenProps} from '../types';
+
+const titles = [
+  {
+    label: '직접 입력',
+    value: '',
+    editable: true,
+  },
+  {
+    label: '빨래 널기',
+    value: '빨래 널기',
+    editable: false,
+  },
+  {
+    label: '빨래 개기',
+    value: '빨래 개기',
+    editable: false,
+  },
+  {
+    label: '세탁기 돌리기',
+    value: '세탁기 돌리기',
+    editable: false,
+  },
+  {
+    label: '다림질 하기',
+    value: '다림질 하기',
+    editable: false,
+  },
+  {
+    label: '바느질 하기',
+    value: '바느질 하기',
+    editable: false,
+  },
+  {
+    label: '수선집 다녀오기',
+    value: '수선집 다녀오기',
+    editable: false,
+  },
+];
+
+const users = [
+  {
+    key: '김아빠',
+    label: '김아빠',
+    value: 0,
+    color: Colors.skyblue,
+    icon: () => <ProfileIcon color={Colors.skyblue} />,
+  },
+  {
+    key: '마미',
+    label: '마미',
+    value: 1,
+    color: Colors.purple,
+    icon: () => <ProfileIcon color={Colors.purple} />,
+  },
+  {
+    key: '김공주',
+    label: '김공주',
+    value: 1,
+    color: Colors.pink,
+    icon: () => <ProfileIcon color={Colors.pink} />,
+  },
+  {
+    key: '막냉이',
+    label: '막냉이',
+    value: 1,
+    color: Colors.green,
+    icon: () => <ProfileIcon color={Colors.green} />,
+  },
+];
 
 export default function AddToDoScreen({
   navigation,
@@ -50,48 +119,14 @@ export default function AddToDoScreen({
   const [title, setTitle] = useState('');
   const [titleCollapsed, setTitleCollapsed] = useState(true);
   const [titleFieldFocused, setTitleFieldFocused] = useState(false);
+  const [titleEditable, setTitleEditable] = useState(false);
+  const titleRef = useRef<TextInput>(null);
+  const [titlePlaceholder, setTitlePlaceholder] = useState('할 일 선택하기');
   const [whoModalVisible, setWhoModalVisible] = useState(false);
-  const [disabled, setDisabled] = useState(selectedUser.label === '');
-  const users = [
-    {
-      key: '김아빠',
-      label: '김아빠',
-      value: 0,
-      color: Colors.skyblue,
-      icon: () => <ProfileIcon color={Colors.skyblue} />,
-    },
-    {
-      key: '마미',
-      label: '마미',
-      value: 1,
-      color: Colors.purple,
-      icon: () => <ProfileIcon color={Colors.purple} />,
-    },
-    {
-      key: '김공주',
-      label: '김공주',
-      value: 1,
-      color: Colors.pink,
-      icon: () => <ProfileIcon color={Colors.pink} />,
-    },
-    {
-      key: '막냉이',
-      label: '막냉이',
-      value: 1,
-      color: Colors.green,
-      icon: () => <ProfileIcon color={Colors.green} />,
-    },
-  ];
+  const [whoButtondisabled, setWhoButtonDisabled] = useState(
+    selectedUser.label === '',
+  );
 
-  const titles = [
-    '직접 입력',
-    '빨래 널기',
-    '빨래 개기',
-    '세탁기 돌리기',
-    '다림질 하기',
-    '바느질 하기',
-    '수선집 다녀오기',
-  ];
   return (
     <>
       <Modal
@@ -136,7 +171,7 @@ export default function AddToDoScreen({
               <Pressable
                 onPress={() => {
                   setSelectedUser(item);
-                  setDisabled(false);
+                  setWhoButtonDisabled(false);
                 }}
                 style={{
                   height: Layout.Height * 0.04,
@@ -171,7 +206,7 @@ export default function AddToDoScreen({
             ))}
           </View>
           <Pressable
-            disabled={disabled}
+            disabled={whoButtondisabled}
             onPress={() => {
               setWhoModalVisible(false);
               setWho(selectedUser.label);
@@ -225,9 +260,11 @@ export default function AddToDoScreen({
               alignItems: 'center',
             }}>
             <TextInput
+              ref={titleRef}
+              editable={titleEditable}
               value={title}
               onChangeText={text => setTitle(text)}
-              placeholder="할 일 제목을 입력하세요."
+              placeholder={titlePlaceholder}
               placeholderTextColor={Colors.deepGray}
               style={{
                 width: Layout.Width * 0.75,
@@ -255,19 +292,34 @@ export default function AddToDoScreen({
               renderItem={item => (
                 <Pressable
                   onPress={() => {
-                    if (item.item === '직접 입력') setTitle(title);
-                    else setTitle(item.item);
+                    setTitleEditable(item.item.editable);
+                    setTitle(item.item.value);
+                    if (item.item.editable) {
+                      setTitleFieldFocused(true);
+                      setTitlePlaceholder('직접 입력');
+                    }
                     setTitleCollapsed(!titleCollapsed);
                   }}
                   style={({pressed}) => ({
                     opacity: pressed ? 0.5 : 1,
+                    height: Layout.Height * 0.043,
+                    justifyContent: 'center',
+                    borderColor: Colors.darkGray,
+                    borderWidth: 1,
+                    borderTopWidth: 0,
+                    paddingHorizontal: Layout.Width * 0.03,
+                    alignItems: 'center',
+                    borderBottomLeftRadius: item.index === 6 ? 10 : 0,
+                    borderBottomRightRadius: item.index === 6 ? 10 : 0,
+                    backgroundColor:
+                      title === item.item.value ? Colors.yellow : Colors.white,
                   })}>
                   <Text
                     style={{
                       color: Colors.black,
                       fontSize: Layout.FontScale * 18,
                     }}>
-                    {item.item}
+                    {item.item.label}
                   </Text>
                 </Pressable>
               )}
@@ -386,7 +438,7 @@ export default function AddToDoScreen({
               color: Colors.deepGray,
               fontSize: Layout.FontScale * 18,
             }}>
-            쿠폰
+            완료 시 쿠폰
           </Text>
         </Pressable>
         <Pressable
@@ -415,37 +467,19 @@ export default function AddToDoScreen({
         </Pressable>
       </View>
       <Pressable
-        onPress={() => navigation.navigate('ToDoList')}
-        style={({pressed}) => ({
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          opacity: pressed ? 0.5 : 1,
-          width: Layout.Width * 0.5,
-          height: Layout.Height * 0.06,
-          backgroundColor: Colors.lightGray,
-          justifyContent: 'center',
-          alignItems: 'center',
-        })}>
-        <Text
-          style={{
-            color: Colors.black,
-            fontSize: Layout.FontScale * 18,
-            fontWeight: 'bold',
-          }}>
-          취소
-        </Text>
-      </Pressable>
-      <Pressable
+        disabled={title === '' || selectedUser.label === ''}
         onPress={() => navigation.navigate('ToDoList')}
         style={({pressed}) => ({
           position: 'absolute',
           bottom: 0,
           right: 0,
           opacity: pressed ? 0.5 : 1,
-          width: Layout.Width * 0.5,
+          width: Layout.Width,
           height: Layout.Height * 0.06,
-          backgroundColor: Colors.yellow,
+          backgroundColor:
+            title === '' || selectedUser.label === ''
+              ? Colors.darkGray
+              : Colors.yellow,
           justifyContent: 'center',
           alignItems: 'center',
         })}>
