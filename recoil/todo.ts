@@ -11,6 +11,7 @@ import Trash from '../assets/icons/trash.svg';
 
 export interface ITodoitemTypes{
     id: number;
+    category: string;
     todo: string;
     who: string;
     done: boolean;
@@ -46,6 +47,7 @@ export const todosState = atom<ITodoTypes[]>({
         data:[
         {
         id: 1,
+        category : '의류',
         todo: 'Todo List를',
         who: '아빠',
         done: false
@@ -57,6 +59,7 @@ export const todosState = atom<ITodoTypes[]>({
         data:[
         {
         id: 2,
+        category : '쓰레기 배출',
         todo: '자유롭게',
         who: '아들',
         done: false,
@@ -68,6 +71,7 @@ export const todosState = atom<ITodoTypes[]>({
         data:[
         {
         id: 3,
+        category : '청소',
         todo: '추가해보세요!',
         who: '아빠',
         done: false,
