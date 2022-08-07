@@ -278,6 +278,7 @@ export default function ToDoListScreen({
               id={item.id}
               todo={item.todo}
               who={item.who}
+              category={item.category}
               onDone={onDone}
               onDelete={onDelete}
               todos={todos}
