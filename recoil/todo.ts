@@ -47,13 +47,13 @@ export const todosState = atom<ITodoTypes[]>({
               {
                 id:1,
                 todo: '세탁기 돌리기',
-                who: '아빠',
+                who: '김아빠',
                 done: false,
               },
               {
                 id:2,
                 todo: '빨래 널기',
-                who: '엄마',
+                who: '마미',
                 done: true,
               },
             ],
@@ -64,7 +64,7 @@ export const todosState = atom<ITodoTypes[]>({
               {
                 id:3,
                 todo: '거실 청소',
-                who: '아들',
+                who: '김공주',
                 done: true,
               },
             ],
@@ -75,13 +75,13 @@ export const todosState = atom<ITodoTypes[]>({
               {
                 id:4,
                 todo: '재활용 쓰레기 분리수거',
-                who: '딸',
+                who: '막냉이',
                 done: false,
               },
               {
                 id:5,
                 todo: '음식물 쓰레기 버리기',
-                who: '엄마',
+                who: '막냉이',
                 done: true,
               },
             ],
