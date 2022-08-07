@@ -10,6 +10,7 @@ export default {
     skyblue: '#7FB5FF',
     navy: '#1F4690',
     purple: '#CA82FF',
-    green: '#95CD41'
+    green: '#95CD41',
+    red: '#E14C1C',
   };
   

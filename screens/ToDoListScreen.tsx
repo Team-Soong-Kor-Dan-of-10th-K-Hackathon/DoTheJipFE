@@ -275,8 +275,7 @@ export default function ToDoListScreen({
           renderItem={({item}) => (
             <ToDo
               key={item.id}
-              id={item.id} 
-              category={item.category}
+              id={item.id}
               todo={item.todo}
               who={item.who}
               onDone={onDone}

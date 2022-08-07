@@ -43,42 +43,50 @@ export const todosState = atom<ITodoTypes[]>({
     // default에는 임의의 데이터를 넣어줍시다.
     default: [
       {
-
-        title : '의류',
-        data:[
-        {
-        id: 1,
-        category : '의류',
-        todo: 'Todo List를',
-        who: '아빠',
-        done: false
-        },]
-      },
-  
-      {  
-        title : '쓰레기 배출',
-        data:[
-        {
-        id: 2,
-        category : '쓰레기 배출',
-        todo: '자유롭게',
-        who: '아들',
-        done: false,
-        }]
-      },
-  
-      {
-        title: '청소',
-        data:[
-        {
-        id: 3,
-        category : '청소',
-        todo: '추가해보세요!',
-        who: '아빠',
-        done: false,
-        }]
-      }
-
+            title: '의류',
+            data: [
+              {
+                id:1,
+                todo: '세탁기 돌리기',
+                who: '아빠',
+                done: false,
+              },
+              {
+                id:2,
+                todo: '빨래 널기',
+                who: '엄마',
+                done: true,
+              },
+            ],
+          },
+          {
+            title: '청소',
+            data: [
+              {
+                id:3,
+                todo: '거실 청소',
+                who: '아들',
+                done: true,
+              },
+            ],
+          },
+          {
+            title: '쓰레기 배출',
+            data: [
+              {
+                id:4,
+                todo: '재활용 쓰레기 분리수거',
+                who: '딸',
+                done: false,
+              },
+              {
+                id:5,
+                todo: '음식물 쓰레기 버리기',
+                who: '엄마',
+                done: true,
+              },
+            ],
+          },
     ],
   });
   
