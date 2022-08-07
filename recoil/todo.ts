@@ -43,6 +43,7 @@ export const todosState = atom<ITodoTypes[]>({
     // default에는 임의의 데이터를 넣어줍시다.
     default: [
       {
+
         title : '의류',
         data:[
         {
@@ -77,6 +78,7 @@ export const todosState = atom<ITodoTypes[]>({
         done: false,
         }]
       }
+
     ],
   });
   

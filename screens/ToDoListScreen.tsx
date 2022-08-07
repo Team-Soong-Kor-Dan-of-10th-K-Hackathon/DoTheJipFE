@@ -18,53 +18,10 @@ import ToDo from '../components/ToDo';
 
 import ReactNativeCalendarStrip from 'react-native-calendar-strip';
 import * as React from 'react';
-import {useState} from 'react';
+import {useRef, useState} from 'react';
 
 import AddIcon from '../assets/icons/add.svg';
 import {RootStackScreenProps} from '../types';
-
-// const ToDoList = [
-//   {
-//     title: '의류',
-//     data: [
-//       {
-//         todo: '세탁기 돌리기',
-//         who: '아빠',
-//         done: false,
-//       },
-//       {
-//         todo: '빨래 널기',
-//         who: '엄마',
-//         done: true,
-//       },
-//     ],
-//   },
-//   {
-//     title: '청소',
-//     data: [
-//       {
-//         todo: '거실 청소',
-//         who: '아들',
-//         done: true,
-//       },
-//     ],
-//   },
-//   {
-//     title: '쓰레기 배출',
-//     data: [
-//       {
-//         todo: '재활용 쓰레기 분리수거',
-//         who: '딸',
-//         done: false,
-//       },
-//       {
-//         todo: '음식물 쓰레기 버리기',
-//         who: '엄마',
-//         done: true,
-//       },
-//     ],
-//   },
-// ];
 
 function filterToDoList(list: ITodoTypes[]) {
   const filteredToDoList = [];
@@ -84,6 +41,7 @@ export default function ToDoListScreen({
   const [date, setDate] = useState(new Date());
   const [index, setIndex] = useState(0);
   const [todos, setTodos] = useRecoilState<ITodoTypes[]>(todosState);
+  const scrollViewRef = useRef<ScrollView>(null);
 
   const onDone = React.useCallback(
     (id: number): void => {
@@ -213,7 +171,12 @@ export default function ToDoListScreen({
       </View>
       <View style={{flexDirection: 'row'}}>
         <Pressable
-          onPress={() => setIndex(0)}
+          onPress={() => {
+            scrollViewRef.current?.scrollTo({
+              x: 0,
+              animated: true,
+            });
+          }}
           style={{
             width: Layout.Width * 0.43,
             height: Layout.Height * 0.05,
@@ -233,7 +196,12 @@ export default function ToDoListScreen({
           </Text>
         </Pressable>
         <Pressable
-          onPress={() => setIndex(1)}
+          onPress={() => {
+            scrollViewRef.current?.scrollTo({
+              x: Layout.Width * 0.86,
+              animated: true,
+            });
+          }}
           style={{
             width: Layout.Width * 0.43,
             height: Layout.Height * 0.05,
@@ -254,6 +222,7 @@ export default function ToDoListScreen({
       </View>
 
       <ScrollView
+        ref={scrollViewRef}
         horizontal={true}
         decelerationRate={'normal'}
         snapToInterval={Layout.Width * 0.86}
@@ -262,7 +231,6 @@ export default function ToDoListScreen({
           const newIndex = Math.round(
             e.nativeEvent.contentOffset.x / (Layout.Width * 0.86),
           );
-          console.log(newIndex);
           setIndex(newIndex);
         }}>
         <SectionList
@@ -296,7 +264,11 @@ export default function ToDoListScreen({
           sections={filterToDoList(todos)}
           renderSectionHeader={({section: {title}}) => (
             <Text
-              style={{color: Colors.black, fontSize: Layout.FontScale * 18}}>
+              style={{
+                color: Colors.black,
+                fontSize: Layout.FontScale * 18,
+                fontWeight: 'bold',
+              }}>
               {title}
             </Text>
           )}

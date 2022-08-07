@@ -6,8 +6,9 @@ import {
   View,
   Modal,
   TouchableWithoutFeedback,
-  Dimensions,
-  StatusBar,
+  TextInput,
+  ScrollView,
+  FlatList,
 } from 'react-native';
 import moment from 'moment';
 import Colors from '../constants/Colors';
@@ -22,8 +23,13 @@ import Coupon from '../assets/icons/coupon.svg';
 import Alarm from '../assets/icons/alarm.svg';
 import Check from '../assets/icons/check.svg';
 import Calendar from '../assets/icons/calendar.svg';
+import ProfileIcon from '../components/ProfileIcon';
+import ChevronDown from '../assets/icons/chevron-down.svg';
+import ChevronUp from '../assets/icons/chevron-up.svg';
 
 import DatePicker from 'react-native-date-picker';
+import Collapsible from 'react-native-collapsible';
+
 import {RootStackScreenProps} from '../types';
 
 export default function AddToDoScreen({
@@ -36,93 +42,56 @@ export default function AddToDoScreen({
     key: '',
     label: '',
     value: 0,
-    color: '#fff',
-    icon: () => (
-      <View
-        style={{
-          marginRight: Layout.Width * 0.03,
-          width: Layout.Width * 0.06,
-          height: Layout.Width * 0.06,
-          borderRadius: Layout.Width * 0.06,
-          backgroundColor: Colors.darkGray,
-        }}
-      />
-    ),
+    color: Colors.darkGray,
+    icon: () => <ProfileIcon color={Colors.darkGray} />,
   });
   const [color, setColor] = useState(Colors.darkGray);
   const [who, setWho] = useState('담당자');
+  const [title, setTitle] = useState('');
+  const [titleCollapsed, setTitleCollapsed] = useState(true);
+  const [titleFieldFocused, setTitleFieldFocused] = useState(false);
   const [whoModalVisible, setWhoModalVisible] = useState(false);
+  const [disabled, setDisabled] = useState(selectedUser.label === '');
   const users = [
     {
       key: '김아빠',
       label: '김아빠',
       value: 0,
       color: Colors.skyblue,
-      icon: () => (
-        <View
-          style={{
-            marginRight: Layout.Width * 0.03,
-            width: Layout.Width * 0.06,
-            height: Layout.Width * 0.06,
-            borderRadius: Layout.Width * 0.06,
-            backgroundColor: Colors.skyblue,
-          }}
-        />
-      ),
+      icon: () => <ProfileIcon color={Colors.skyblue} />,
     },
     {
       key: '마미',
       label: '마미',
       value: 1,
       color: Colors.purple,
-      icon: () => (
-        <View
-          style={{
-            marginRight: Layout.Width * 0.03,
-            width: Layout.Width * 0.06,
-            height: Layout.Width * 0.06,
-            borderRadius: Layout.Width * 0.06,
-            backgroundColor: Colors.purple,
-          }}
-        />
-      ),
+      icon: () => <ProfileIcon color={Colors.purple} />,
     },
     {
       key: '김공주',
       label: '김공주',
       value: 1,
       color: Colors.pink,
-      icon: () => (
-        <View
-          style={{
-            marginRight: Layout.Width * 0.03,
-            width: Layout.Width * 0.06,
-            height: Layout.Width * 0.06,
-            borderRadius: Layout.Width * 0.06,
-            backgroundColor: Colors.pink,
-          }}
-        />
-      ),
+      icon: () => <ProfileIcon color={Colors.pink} />,
     },
     {
       key: '막냉이',
       label: '막냉이',
       value: 1,
       color: Colors.green,
-      icon: () => (
-        <View
-          style={{
-            marginRight: Layout.Width * 0.03,
-            width: Layout.Width * 0.06,
-            height: Layout.Width * 0.06,
-            borderRadius: Layout.Width * 0.06,
-            backgroundColor: Colors.green,
-          }}
-        />
-      ),
+      icon: () => <ProfileIcon color={Colors.green} />,
     },
   ];
 
+  const titles = [
+    '직접 입력',
+    '빨래 널기',
+    '빨래 개기',
+    '세탁기 돌리기',
+    '다림질 하기',
+    '바느질 하기',
+    '수선집 다녀오기',
+  ];
   return (
     <>
       <Modal
@@ -165,7 +134,10 @@ export default function AddToDoScreen({
             }}>
             {users.map(item => (
               <Pressable
-                onPress={() => setSelectedUser(item)}
+                onPress={() => {
+                  setSelectedUser(item);
+                  setDisabled(false);
+                }}
                 style={{
                   height: Layout.Height * 0.04,
                   flexDirection: 'row',
@@ -177,15 +149,7 @@ export default function AddToDoScreen({
                   style={{
                     flexDirection: 'row',
                   }}>
-                  <View
-                    style={{
-                      marginRight: Layout.Width * 0.03,
-                      width: Layout.Width * 0.06,
-                      height: Layout.Width * 0.06,
-                      borderRadius: Layout.Width * 0.06,
-                      backgroundColor: item.color,
-                    }}
-                  />
+                  <ProfileIcon color={item.color} />
                   <Text
                     style={{
                       fontSize: Layout.FontScale * 18,
@@ -207,6 +171,7 @@ export default function AddToDoScreen({
             ))}
           </View>
           <Pressable
+            disabled={disabled}
             onPress={() => {
               setWhoModalVisible(false);
               setWho(selectedUser.label);
@@ -214,10 +179,7 @@ export default function AddToDoScreen({
             }}
             style={({pressed}) => ({
               position: 'absolute',
-              bottom:
-                Layout.Height -
-                Dimensions.get('window').height -
-                StatusBar.currentHeight,
+              bottom: Layout.AndroidBottomBarHeight,
               opacity: pressed ? 0.5 : 1,
               width: Layout.Width,
               height: Layout.Height * 0.06,
@@ -247,26 +209,88 @@ export default function AddToDoScreen({
           }}>
           상세설정
         </Text>
+        <View
+          style={{
+            marginBottom: Layout.Height * 0.03,
+          }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              height: Layout.Height * 0.05,
+              borderBottomWidth: 2,
+              borderBottomColor: titleFieldFocused
+                ? Colors.yellow
+                : Colors.darkGray,
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            <TextInput
+              value={title}
+              onChangeText={text => setTitle(text)}
+              placeholder="할 일 제목을 입력하세요."
+              placeholderTextColor={Colors.deepGray}
+              style={{
+                width: Layout.Width * 0.75,
+                color: Colors.black,
+                fontSize: Layout.FontScale * 18,
+              }}
+              onFocus={() => setTitleFieldFocused(true)}
+              onBlur={() => setTitleFieldFocused(false)}
+              returnKeyType="next"
+            />
 
+            <Pressable
+              onPress={() => setTitleCollapsed(!titleCollapsed)}
+              style={({pressed}) => ({
+                opacity: pressed ? 0.5 : 1,
+                width: Layout.Width * 0.1,
+                alignItems: 'flex-end',
+              })}>
+              {titleCollapsed ? <ChevronDown /> : <ChevronUp />}
+            </Pressable>
+          </View>
+          <Collapsible collapsed={titleCollapsed}>
+            <FlatList
+              data={titles}
+              renderItem={item => (
+                <Pressable
+                  onPress={() => {
+                    if (item.item === '직접 입력') setTitle(title);
+                    else setTitle(item.item);
+                    setTitleCollapsed(!titleCollapsed);
+                  }}
+                  style={({pressed}) => ({
+                    opacity: pressed ? 0.5 : 1,
+                  })}>
+                  <Text
+                    style={{
+                      color: Colors.black,
+                      fontSize: Layout.FontScale * 18,
+                    }}>
+                    {item.item}
+                  </Text>
+                </Pressable>
+              )}
+            />
+          </Collapsible>
+        </View>
         <Pressable
           onPress={() => {
             setDateOpen(true);
           }}
           style={({pressed}) => ({
             opacity: pressed ? 0.5 : 1,
-
             width: Layout.Width * 0.86,
-            height: 48,
+            height: Layout.Height * 0.05,
             backgroundColor: Colors.lightGray,
             marginBottom: 18,
             borderRadius: 5,
-            justifyContent: 'flex-start',
             alignItems: 'center',
-            padding: 10,
+            paddingHorizontal: Layout.Width * 0.03,
             flexDirection: 'row',
           })}>
-          <Calendar style={{width: 24, height: 24, marginRight: 15}} />
-          <Text style={{fontSize: 18}}>
+          <Calendar style={{marginRight: Layout.Width * 0.046}} />
+          <Text style={{color: Colors.black, fontSize: 18}}>
             {moment(date).format('YYYY-MM-DD')}
           </Text>
         </Pressable>
@@ -288,24 +312,15 @@ export default function AddToDoScreen({
           style={({pressed}) => ({
             opacity: pressed ? 0.5 : 1,
             width: Layout.Width * 0.86,
-            height: 48,
+            height: Layout.Height * 0.05,
             backgroundColor: Colors.lightGray,
             marginBottom: 18,
             borderRadius: 5,
-            justifyContent: 'flex-start',
             alignItems: 'center',
-            padding: 10,
+            paddingHorizontal: Layout.Width * 0.03,
             flexDirection: 'row',
           })}>
-          <View
-            style={{
-              marginRight: Layout.Width * 0.03,
-              width: Layout.Width * 0.06,
-              height: Layout.Width * 0.06,
-              borderRadius: Layout.Width * 0.06,
-              backgroundColor: color,
-            }}
-          />
+          <ProfileIcon color={color} />
           <Text
             style={{
               color: who == '담당자' ? Colors.deepGray : Colors.black,
@@ -317,13 +332,15 @@ export default function AddToDoScreen({
         <Pressable
           style={{
             width: Layout.Width * 0.86,
-            height: Layout.Height * 0.056,
+            height: Layout.Height * 0.05,
             backgroundColor: Colors.lightGray,
             marginBottom: 18,
-            padding: 10,
+            borderRadius: 5,
+            paddingHorizontal: Layout.Width * 0.03,
             flexDirection: 'row',
+            alignItems: 'center',
           }}>
-          <Alarm style={{marginRight: 18}} />
+          <Alarm style={{marginRight: Layout.Width * 0.046}} />
           <Text
             style={{
               color: Colors.deepGray,
@@ -335,13 +352,15 @@ export default function AddToDoScreen({
         <Pressable
           style={{
             width: Layout.Width * 0.86,
-            height: Layout.Height * 0.056,
+            height: Layout.Height * 0.05,
             backgroundColor: Colors.lightGray,
             marginBottom: 18,
-            padding: 10,
+            borderRadius: 5,
+            paddingHorizontal: Layout.Width * 0.03,
             flexDirection: 'row',
+            alignItems: 'center',
           }}>
-          <Repeat style={{marginRight: 18}} />
+          <Repeat style={{marginRight: Layout.Width * 0.046}} />
           <Text
             style={{
               color: Colors.deepGray,
@@ -353,13 +372,15 @@ export default function AddToDoScreen({
         <Pressable
           style={{
             width: Layout.Width * 0.86,
-            height: Layout.Height * 0.056,
+            height: Layout.Height * 0.05,
             backgroundColor: Colors.lightGray,
             marginBottom: 18,
-            padding: 10,
+            borderRadius: 5,
+            paddingHorizontal: Layout.Width * 0.03,
             flexDirection: 'row',
+            alignItems: 'center',
           }}>
-          <Coupon style={{marginRight: 18}} />
+          <Coupon style={{marginRight: Layout.Width * 0.046}} />
           <Text
             style={{
               color: Colors.deepGray,
@@ -371,14 +392,19 @@ export default function AddToDoScreen({
         <Pressable
           style={{
             width: Layout.Width * 0.86,
-            height: Layout.Height * 0.056,
+            height: Layout.Height * 0.05,
             backgroundColor: Colors.lightGray,
             marginBottom: 18,
-            marginRight: 18,
-            padding: 10,
+            borderRadius: 5,
+            paddingHorizontal: Layout.Width * 0.03,
             flexDirection: 'row',
+            alignItems: 'center',
           }}>
-          <Memo style={{marginRight: 18}} />
+          <Memo
+            style={{
+              marginRight: Layout.Width * 0.046,
+            }}
+          />
           <Text
             style={{
               color: Colors.deepGray,
@@ -388,6 +414,50 @@ export default function AddToDoScreen({
           </Text>
         </Pressable>
       </View>
+      <Pressable
+        onPress={() => navigation.navigate('ToDoList')}
+        style={({pressed}) => ({
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          opacity: pressed ? 0.5 : 1,
+          width: Layout.Width * 0.5,
+          height: Layout.Height * 0.06,
+          backgroundColor: Colors.lightGray,
+          justifyContent: 'center',
+          alignItems: 'center',
+        })}>
+        <Text
+          style={{
+            color: Colors.black,
+            fontSize: Layout.FontScale * 18,
+            fontWeight: 'bold',
+          }}>
+          취소
+        </Text>
+      </Pressable>
+      <Pressable
+        onPress={() => navigation.navigate('ToDoList')}
+        style={({pressed}) => ({
+          position: 'absolute',
+          bottom: 0,
+          right: 0,
+          opacity: pressed ? 0.5 : 1,
+          width: Layout.Width * 0.5,
+          height: Layout.Height * 0.06,
+          backgroundColor: Colors.yellow,
+          justifyContent: 'center',
+          alignItems: 'center',
+        })}>
+        <Text
+          style={{
+            color: Colors.black,
+            fontSize: Layout.FontScale * 18,
+            fontWeight: 'bold',
+          }}>
+          저장
+        </Text>
+      </Pressable>
     </>
   );
 }
