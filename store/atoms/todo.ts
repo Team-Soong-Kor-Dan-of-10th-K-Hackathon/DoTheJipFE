@@ -1,6 +1,6 @@
 import { Color, SvgProps } from "react-native-svg";
 import { atom } from "recoil";
-import Colors from "../constants/Colors";
+import Colors from "../../constants/Colors";
 import Animal from '../assets/icons/animal.svg';
 import Baby from '../assets/icons/baby.svg';
 import Bank from '../assets/icons/bank.svg';

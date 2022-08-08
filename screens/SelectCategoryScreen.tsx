@@ -15,8 +15,8 @@ import Clean from '../assets/icons/clean.svg';
 import Clothes from '../assets/icons/clothes.svg';
 import Meal from '../assets/icons/meal.svg';
 import Trash from '../assets/icons/trash.svg';
-import { useRecoilState } from 'recoil';
-import { ICategoryTypes, categoryList } from '../recoil/todo';
+import {useRecoilState} from 'recoil';
+import {ICategoryTypes, categoryList} from '../store/atoms/todo';
 
 // const categoryList = [
 //   {
@@ -73,8 +73,8 @@ import { ICategoryTypes, categoryList } from '../recoil/todo';
 export default function SelectCategoryScreen({
   navigation,
 }: RootStackScreenProps<'SelectCategory'>) {
-
-  const [categories, setCategories] = useRecoilState<ICategoryTypes[]>(categoryList);
+  const [categories, setCategories] =
+    useRecoilState<ICategoryTypes[]>(categoryList);
   return (
     <View style={styles.container}>
       <Text
