@@ -24,6 +24,7 @@ import ProfileIcon from './ProfileIcon';
 import CheckBox from '../assets/icons/check.svg';
 import {ITodoTypes} from '../store/atoms/todo';
 import {SetterOrUpdater} from 'recoil';
+import DatePicker from 'react-native-date-picker';
 
 interface PropTypes {
   id: number;
@@ -36,6 +37,37 @@ interface PropTypes {
   todos: ITodoTypes[];
   setTodos: SetterOrUpdater<ITodoTypes[]>;
 }
+
+const users = [
+  {
+    key: '김아빠',
+    label: '김아빠',
+    value: 0,
+    color: Colors.skyblue,
+    icon: () => <ProfileIcon color={Colors.skyblue} />,
+  },
+  {
+    key: '마미',
+    label: '마미',
+    value: 1,
+    color: Colors.purple,
+    icon: () => <ProfileIcon color={Colors.purple} />,
+  },
+  {
+    key: '김공주',
+    label: '김공주',
+    value: 1,
+    color: Colors.pink,
+    icon: () => <ProfileIcon color={Colors.pink} />,
+  },
+  {
+    key: '막냉이',
+    label: '막냉이',
+    value: 1,
+    color: Colors.green,
+    icon: () => <ProfileIcon color={Colors.green} />,
+  },
+];
 
 export default function ToDo({
   id,
@@ -50,20 +82,21 @@ export default function ToDo({
 }: PropTypes) {
   const [modalVisible, setModalVisible] = useState(false);
   const [titleFieldFocused, setTitleFieldFocused] = useState(false);
-  const [titleEditable, setTitleEditable] = useState(false);
+  const [editable, setEditable] = useState(false);
   const [title, setTitle] = useState('');
   const [date, setDate] = useState(new Date());
   const [openDate, setDateOpen] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [selectedUser, setSelectedUser] = useState({
     key: '',
-    label: '',
+    label: who,
     value: 0,
     color: Colors.darkGray,
     icon: () => <ProfileIcon color={Colors.darkGray} />,
   });
   const [color, setColor] = useState(Colors.black);
-  const [whos, setWho] = useState('담당자');
+  const [whos, setWho] = useState(who);
+  const [whoModalVisible, setWhoModalVisible] = useState(false);
 
   React.useEffect(() => {
     setColor(() => {
@@ -87,7 +120,11 @@ export default function ToDo({
         animationType={'fade'}
         transparent={true}
         statusBarTranslucent={true}>
-        <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            setEditable(false);
+            setModalVisible(false);
+          }}>
           <View
             style={{
               width: Layout.Width,
@@ -109,13 +146,24 @@ export default function ToDo({
             paddingHorizontal: Layout.Width * 0.07,
             paddingVertical: Layout.Height * 0.05,
           }}>
+          <Text
+            style={{
+              color: Colors.black,
+              fontSize: 24,
+              fontWeight: 'bold',
+              marginBottom: Layout.Height * 0.02,
+            }}>
+            {category}
+          </Text>
           <View
             style={{
               flexDirection: 'row',
               height: Layout.Height * 0.05,
               borderBottomWidth: 2,
-              borderBottomColor: titleFieldFocused
-                ? Colors.yellow
+              borderBottomColor: editable
+                ? titleFieldFocused
+                  ? Colors.yellow
+                  : Colors.darkGray
                 : Colors.darkGray,
               justifyContent: 'space-between',
               alignItems: 'center',
@@ -125,9 +173,8 @@ export default function ToDo({
               value={todo}
               placeholder={todo}
               placeholderTextColor={Colors.deepGray}
-              editable={titleEditable}
+              editable={editable}
               style={{
-                width: Layout.Width * 0.75,
                 color: Colors.black,
                 fontSize: Layout.FontScale * 18,
               }}
@@ -138,10 +185,10 @@ export default function ToDo({
           </View>
           <Pressable
             onPress={() => {
-              setDateOpen(true);
+              if (editable) setDateOpen(true);
             }}
             style={({pressed}) => ({
-              opacity: pressed ? 0.5 : 1,
+              opacity: editable ? (pressed ? 0.5 : 1) : 1,
               width: Layout.Width * 0.86,
               height: Layout.Height * 0.05,
               backgroundColor: Colors.lightGray,
@@ -156,9 +203,25 @@ export default function ToDo({
               {moment(date).format('YYYY-MM-DD')}
             </Text>
           </Pressable>
+          <DatePicker
+            modal
+            date={date}
+            mode={'date'}
+            open={openDate}
+            onConfirm={date => {
+              setDate(date);
+              setDateOpen(false);
+            }}
+            onCancel={() => {
+              setDateOpen(false);
+            }}
+          />
           <Pressable
+            onPress={() => {
+              if (editable) setWhoModalVisible(true);
+            }}
             style={({pressed}) => ({
-              opacity: pressed ? 0.5 : 1,
+              opacity: editable ? (pressed ? 0.5 : 1) : 1,
               width: Layout.Width * 0.86,
               height: Layout.Height * 0.05,
               backgroundColor: Colors.lightGray,
@@ -174,7 +237,7 @@ export default function ToDo({
                 color: who == '담당자' ? Colors.deepGray : Colors.black,
                 fontSize: Layout.FontScale * 18,
               }}>
-              {who}
+              {whos}
             </Text>
           </Pressable>
           <Pressable
@@ -262,9 +325,12 @@ export default function ToDo({
             </Text>
           </Pressable>
           <Pressable
+            onPress={() => {
+              if (editable) setEditable(false);
+            }}
             style={({pressed}) => ({
               position: 'absolute',
-              bottom: 0,
+              bottom: Layout.AndroidBottomBarHeight,
               left: 0,
               opacity: pressed ? 0.5 : 1,
               width: Layout.Width * 0.5,
@@ -283,13 +349,19 @@ export default function ToDo({
                 fontSize: Layout.FontScale * 18,
                 fontWeight: 'bold',
               }}>
-              삭제
+              {editable ? '취소' : '삭제'}
             </Text>
           </Pressable>
           <Pressable
+            onPress={() => {
+              if (editable) {
+                // 편집 된 내용을 저장하고 투두 정보를 새로 불러옴
+                setEditable(false);
+              } else setEditable(true);
+            }}
             style={({pressed}) => ({
               position: 'absolute',
-              bottom: 0,
+              bottom: Layout.AndroidBottomBarHeight,
               right: 0,
               opacity: pressed ? 0.5 : 1,
               width: Layout.Width * 0.5,
@@ -308,7 +380,7 @@ export default function ToDo({
                 fontSize: Layout.FontScale * 18,
                 fontWeight: 'bold',
               }}>
-              편집
+              {editable ? '저장' : '편집'}
             </Text>
           </Pressable>
         </View>
@@ -373,6 +445,110 @@ export default function ToDo({
           <CheckBox />
         </Pressable>
       </Pressable>
+      <Modal
+        visible={whoModalVisible}
+        animationType={'fade'}
+        transparent={true}
+        statusBarTranslucent={true}>
+        <TouchableWithoutFeedback onPress={() => setWhoModalVisible(false)}>
+          <View
+            style={{
+              width: Layout.Width,
+              height: Layout.Height,
+              backgroundColor: '#000',
+              opacity: 0.3,
+            }}
+          />
+        </TouchableWithoutFeedback>
+        <View
+          style={{
+            width: Layout.Width,
+            height: Layout.Height * 0.5,
+            backgroundColor: Colors.white,
+            position: 'absolute',
+            top: Layout.Height * 0.5,
+            borderTopRightRadius: 20,
+            borderTopLeftRadius: 20,
+            paddingVertical: Layout.Height * 0.05,
+            paddingHorizontal: Layout.Width * 0.07,
+          }}>
+          <Text
+            style={{
+              color: Colors.black,
+              fontSize: Layout.FontScale * 24,
+            }}>
+            담당자 선택
+          </Text>
+          <View
+            style={{
+              marginTop: Layout.Height * 0.03,
+            }}>
+            {users.map(item => (
+              <Pressable
+                key={item.key}
+                onPress={() => {
+                  setSelectedUser(item);
+                }}
+                style={{
+                  height: Layout.Height * 0.04,
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginVertical: Layout.Height * 0.01,
+                }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                  }}>
+                  <ProfileIcon color={item.color} />
+                  <Text
+                    style={{
+                      fontSize: Layout.FontScale * 18,
+                      color: Colors.black,
+                    }}>
+                    {item.label}
+                  </Text>
+                </View>
+                {selectedUser.label === item.label ? (
+                  <View
+                    style={{
+                      borderRadius: 5,
+                      backgroundColor: Colors.yellow,
+                    }}>
+                    <Check />
+                  </View>
+                ) : undefined}
+              </Pressable>
+            ))}
+          </View>
+          <Pressable
+            onPress={() => {
+              setWhoModalVisible(false);
+              setWho(selectedUser.label);
+              setColor(selectedUser.color);
+            }}
+            style={({pressed}) => ({
+              position: 'absolute',
+              bottom: Layout.AndroidBottomBarHeight,
+              opacity: pressed ? 0.5 : 1,
+              width: Layout.Width,
+              height: Layout.Height * 0.06,
+              backgroundColor:
+                selectedUser.label === '' ? Colors.lightGray : Colors.yellow,
+              justifyContent: 'center',
+              alignItems: 'center',
+            })}>
+            <Text
+              style={{
+                color: Colors.black,
+                fontSize: Layout.FontScale * 18,
+                fontWeight: 'bold',
+              }}>
+              완료
+            </Text>
+          </Pressable>
+        </View>
+      </Modal>
     </>
   );
 }

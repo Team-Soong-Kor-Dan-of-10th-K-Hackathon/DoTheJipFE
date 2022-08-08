@@ -14,7 +14,6 @@ import moment from 'moment';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 
-
 import * as React from 'react';
 import {createRef, useRef, useState} from 'react';
 
@@ -35,36 +34,43 @@ import {RootStackScreenProps} from '../types';
 
 const titles = [
   {
+    key: '',
     label: '직접 입력',
     value: '',
     editable: true,
   },
   {
+    key: '빨래 널기',
     label: '빨래 널기',
     value: '빨래 널기',
     editable: false,
   },
   {
+    key: '빨래 개기',
     label: '빨래 개기',
     value: '빨래 개기',
     editable: false,
   },
   {
+    key: '세탁기 돌리기',
     label: '세탁기 돌리기',
     value: '세탁기 돌리기',
     editable: false,
   },
   {
+    key: '다림질 하기',
     label: '다림질 하기',
     value: '다림질 하기',
     editable: false,
   },
   {
+    key: '바느질 하기',
     label: '바느질 하기',
     value: '바느질 하기',
     editable: false,
   },
   {
+    key: '수선집 다녀오기',
     label: '수선집 다녀오기',
     value: '수선집 다녀오기',
     editable: false,
@@ -170,6 +176,7 @@ export default function AddToDoScreen({
             }}>
             {users.map(item => (
               <Pressable
+                key={item.key}
                 onPress={() => {
                   setSelectedUser(item);
                   setWhoButtonDisabled(false);
@@ -289,6 +296,7 @@ export default function AddToDoScreen({
           </View>
           <Collapsible collapsed={titleCollapsed}>
             <FlatList
+              keyExtractor={item => item.key}
               data={titles}
               renderItem={item => (
                 <Pressable
@@ -476,14 +484,15 @@ export default function AddToDoScreen({
           right: 0,
           opacity: pressed ? 0.5 : 1,
           width: Layout.Width,
-          height: Platform.OS=='ios' ? Layout.Height*0.07 : Layout.Height*0.06,
+          height:
+            Platform.OS == 'ios' ? Layout.Height * 0.07 : Layout.Height * 0.06,
           backgroundColor:
             title === '' || selectedUser.label === ''
               ? Colors.darkGray
               : Colors.yellow,
           justifyContent: 'center',
           alignItems: 'center',
-          paddingBottom: Platform.OS=='ios' ? Layout.Height*0.01 : 0,
+          paddingBottom: Platform.OS == 'ios' ? Layout.Height * 0.01 : 0,
         })}>
         <Text
           style={{
