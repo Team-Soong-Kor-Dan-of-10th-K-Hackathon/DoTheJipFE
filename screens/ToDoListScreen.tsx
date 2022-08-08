@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 
 import {useRecoilState} from 'recoil';
-import {todosState, ITodoTypes, ITodoitemTypes} from '../recoil/todo';
+import {todosState, ITodoTypes, ITodoitemTypes} from '../store/atoms/todo';
 
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';

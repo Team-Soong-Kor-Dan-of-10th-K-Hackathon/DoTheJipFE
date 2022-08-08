@@ -22,14 +22,14 @@ import Layout from '../constants/Layout';
 import ProfileIcon from './ProfileIcon';
 
 import CheckBox from '../assets/icons/check.svg';
-import {ITodoTypes} from '../recoil/todo';
+import {ITodoTypes} from '../store/atoms/todo';
 import {SetterOrUpdater} from 'recoil';
 
 interface PropTypes {
   id: number;
   todo: string;
   who: string;
-  category:string;
+  category: string;
   done: boolean;
   onDone: (id: number) => void;
   onDelete: (id: number) => void;
@@ -64,24 +64,21 @@ export default function ToDo({
   });
   const [color, setColor] = useState(Colors.black);
   const [whos, setWho] = useState('담당자');
-  
-  React.useEffect(()=>{
-    setColor(()=>{
-      if(who == '김아빠'){
-        return Colors.skyblue
+
+  React.useEffect(() => {
+    setColor(() => {
+      if (who == '김아빠') {
+        return Colors.skyblue;
+      } else if (who == '막냉이') {
+        return Colors.green;
+      } else if (who == '마미') {
+        return Colors.purple;
+      } else if (who == '김공주') {
+        return Colors.pink;
       }
-      else if(who == '막냉이'){
-        return Colors.green
-      }
-      else if(who == '마미'){
-        return Colors.purple
-      }
-      else if(who == '김공주'){
-        return Colors.pink
-      }
-      return Colors.black
-    })
-  },[])
+      return Colors.black;
+    });
+  }, []);
 
   return (
     <>
@@ -112,7 +109,7 @@ export default function ToDo({
             paddingHorizontal: Layout.Width * 0.07,
             paddingVertical: Layout.Height * 0.05,
           }}>
-           <View
+          <View
             style={{
               flexDirection: 'row',
               height: Layout.Height * 0.05,
@@ -122,192 +119,198 @@ export default function ToDo({
                 : Colors.darkGray,
               justifyContent: 'space-between',
               alignItems: 'center',
-              marginBottom:18,
+              marginBottom: 18,
             }}>
-          <TextInput
-            value={todo}
-            placeholder={todo}
-            placeholderTextColor={Colors.deepGray}
-            editable={titleEditable}
-            style={{
-              width: Layout.Width * 0.75,
-              color: Colors.black,
-              fontSize: Layout.FontScale * 18
-            }}
-            onFocus={() => setTitleFieldFocused(true)}
-            onBlur={() => setTitleFieldFocused(false)}
-            returnKeyType="next"
-          />
+            <TextInput
+              value={todo}
+              placeholder={todo}
+              placeholderTextColor={Colors.deepGray}
+              editable={titleEditable}
+              style={{
+                width: Layout.Width * 0.75,
+                color: Colors.black,
+                fontSize: Layout.FontScale * 18,
+              }}
+              onFocus={() => setTitleFieldFocused(true)}
+              onBlur={() => setTitleFieldFocused(false)}
+              returnKeyType="next"
+            />
           </View>
-        <Pressable
-          onPress={() => {
-            setDateOpen(true);
-          }}
-          style={({pressed}) => ({
-            opacity: pressed ? 0.5 : 1,
-            width: Layout.Width * 0.86,
-            height: Layout.Height * 0.05,
-            backgroundColor: Colors.lightGray,
-            marginBottom: 18,
-            borderRadius: 5,
-            alignItems: 'center',
-            paddingHorizontal: Layout.Width * 0.03,
-            flexDirection: 'row',
-          })}>
-          <Calendar style={{marginRight: Layout.Width * 0.046}} />
-          <Text style={{color: Colors.black, fontSize: 18}}>
-            {moment(date).format('YYYY-MM-DD')}
-          </Text>
-        </Pressable>
-        <Pressable
-          style={({pressed}) => ({
-            opacity: pressed ? 0.5 : 1,
-            width: Layout.Width * 0.86,
-            height: Layout.Height * 0.05,
-            backgroundColor: Colors.lightGray,
-            marginBottom: 18,
-            borderRadius: 5,
-            alignItems: 'center',
-            paddingHorizontal: Layout.Width * 0.03,
-            flexDirection: 'row',
-          })}>
-          <ProfileIcon color={color} />
-          <Text
-            style={{
-              color: who == '담당자' ? Colors.deepGray : Colors.black,
-              fontSize: Layout.FontScale * 18,
-            }}>
-            {who}
-          </Text>
-        </Pressable>
-        <Pressable
-          style={{
-            width: Layout.Width * 0.86,
-            height: Layout.Height * 0.05,
-            backgroundColor: Colors.lightGray,
-            marginBottom: 18,
-            borderRadius: 5,
-            paddingHorizontal: Layout.Width * 0.03,
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}>
-          <Alarm style={{marginRight: Layout.Width * 0.046}} />
-          <Text
-            style={{
-              color: Colors.deepGray,
-              fontSize: Layout.FontScale * 18,
-            }}>
-            알림 없음
-          </Text>
-        </Pressable>
-        <Pressable
-          style={{
-            width: Layout.Width * 0.86,
-            height: Layout.Height * 0.05,
-            backgroundColor: Colors.lightGray,
-            marginBottom: 18,
-            borderRadius: 5,
-            paddingHorizontal: Layout.Width * 0.03,
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}>
-          <Repeat style={{marginRight: Layout.Width * 0.046}} />
-          <Text
-            style={{
-              color: Colors.deepGray,
-              fontSize: Layout.FontScale * 18,
-            }}>
-            반복 없음
-          </Text>
-        </Pressable>
-        <Pressable
-          style={{
-            width: Layout.Width * 0.86,
-            height: Layout.Height * 0.05,
-            backgroundColor: Colors.lightGray,
-            marginBottom: 18,
-            borderRadius: 5,
-            paddingHorizontal: Layout.Width * 0.03,
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}>
-          <Coupon style={{marginRight: Layout.Width * 0.046}} />
-          <Text
-            style={{
-              color: Colors.deepGray,
-              fontSize: Layout.FontScale * 18,
-            }}>
-            쿠폰 없음
-          </Text>
-        </Pressable>
-        <Pressable
-          style={{
-            width: Layout.Width * 0.86,
-            height: Layout.Height * 0.05,
-            backgroundColor: Colors.lightGray,
-            marginBottom: 18,
-            borderRadius: 5,
-            paddingHorizontal: Layout.Width * 0.03,
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}>
-          <Memo
-            style={{
-              marginRight: Layout.Width * 0.046,
+          <Pressable
+            onPress={() => {
+              setDateOpen(true);
             }}
-          />
-          <Text
+            style={({pressed}) => ({
+              opacity: pressed ? 0.5 : 1,
+              width: Layout.Width * 0.86,
+              height: Layout.Height * 0.05,
+              backgroundColor: Colors.lightGray,
+              marginBottom: 18,
+              borderRadius: 5,
+              alignItems: 'center',
+              paddingHorizontal: Layout.Width * 0.03,
+              flexDirection: 'row',
+            })}>
+            <Calendar style={{marginRight: Layout.Width * 0.046}} />
+            <Text style={{color: Colors.black, fontSize: 18}}>
+              {moment(date).format('YYYY-MM-DD')}
+            </Text>
+          </Pressable>
+          <Pressable
+            style={({pressed}) => ({
+              opacity: pressed ? 0.5 : 1,
+              width: Layout.Width * 0.86,
+              height: Layout.Height * 0.05,
+              backgroundColor: Colors.lightGray,
+              marginBottom: 18,
+              borderRadius: 5,
+              alignItems: 'center',
+              paddingHorizontal: Layout.Width * 0.03,
+              flexDirection: 'row',
+            })}>
+            <ProfileIcon color={color} />
+            <Text
+              style={{
+                color: who == '담당자' ? Colors.deepGray : Colors.black,
+                fontSize: Layout.FontScale * 18,
+              }}>
+              {who}
+            </Text>
+          </Pressable>
+          <Pressable
             style={{
-              color: Colors.deepGray,
-              fontSize: Layout.FontScale * 18,
+              width: Layout.Width * 0.86,
+              height: Layout.Height * 0.05,
+              backgroundColor: Colors.lightGray,
+              marginBottom: 18,
+              borderRadius: 5,
+              paddingHorizontal: Layout.Width * 0.03,
+              flexDirection: 'row',
+              alignItems: 'center',
             }}>
-            메모 없음
-          </Text>
-        </Pressable>
-        <Pressable
-        style={({pressed}) => ({
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          opacity: pressed ? 0.5 : 1,
-          width: Layout.Width * 0.5,
-          height: Platform.OS=='ios' ? Layout.Height*0.07: Layout.Height * 0.06,
-          backgroundColor: Colors.lightGray,
-          justifyContent: 'center',
-          alignItems: 'center',
-          paddingBottom: Platform.OS=='ios' ? Layout.Height*0.01 : 0,
-        })}>
-        <Text
-          style={{
-            color: Colors.red,
-            fontSize: Layout.FontScale * 18,
-            fontWeight: 'bold',
-          }}>
-          삭제
-        </Text>
-      </Pressable>
-      <Pressable
-        style={({pressed}) => ({
-          position: 'absolute',
-          bottom: 0,
-          right: 0,
-          opacity: pressed ? 0.5 : 1,
-          width: Layout.Width * 0.5,
-          height: Platform.OS=='ios' ? Layout.Height*0.07: Layout.Height * 0.06,
-          backgroundColor: Colors.yellow,
-          justifyContent: 'center',
-          alignItems: 'center',
-          paddingBottom: Platform.OS=='ios' ? Layout.Height*0.01 : 0,
-        })}>
-        <Text
-          style={{
-            color: Colors.black,
-            fontSize: Layout.FontScale * 18,
-            fontWeight: 'bold',
-          }}>
-          편집
-        </Text>
-      </Pressable>
+            <Alarm style={{marginRight: Layout.Width * 0.046}} />
+            <Text
+              style={{
+                color: Colors.deepGray,
+                fontSize: Layout.FontScale * 18,
+              }}>
+              알림 없음
+            </Text>
+          </Pressable>
+          <Pressable
+            style={{
+              width: Layout.Width * 0.86,
+              height: Layout.Height * 0.05,
+              backgroundColor: Colors.lightGray,
+              marginBottom: 18,
+              borderRadius: 5,
+              paddingHorizontal: Layout.Width * 0.03,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <Repeat style={{marginRight: Layout.Width * 0.046}} />
+            <Text
+              style={{
+                color: Colors.deepGray,
+                fontSize: Layout.FontScale * 18,
+              }}>
+              반복 없음
+            </Text>
+          </Pressable>
+          <Pressable
+            style={{
+              width: Layout.Width * 0.86,
+              height: Layout.Height * 0.05,
+              backgroundColor: Colors.lightGray,
+              marginBottom: 18,
+              borderRadius: 5,
+              paddingHorizontal: Layout.Width * 0.03,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <Coupon style={{marginRight: Layout.Width * 0.046}} />
+            <Text
+              style={{
+                color: Colors.deepGray,
+                fontSize: Layout.FontScale * 18,
+              }}>
+              쿠폰 없음
+            </Text>
+          </Pressable>
+          <Pressable
+            style={{
+              width: Layout.Width * 0.86,
+              height: Layout.Height * 0.05,
+              backgroundColor: Colors.lightGray,
+              marginBottom: 18,
+              borderRadius: 5,
+              paddingHorizontal: Layout.Width * 0.03,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <Memo
+              style={{
+                marginRight: Layout.Width * 0.046,
+              }}
+            />
+            <Text
+              style={{
+                color: Colors.deepGray,
+                fontSize: Layout.FontScale * 18,
+              }}>
+              메모 없음
+            </Text>
+          </Pressable>
+          <Pressable
+            style={({pressed}) => ({
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              opacity: pressed ? 0.5 : 1,
+              width: Layout.Width * 0.5,
+              height:
+                Platform.OS == 'ios'
+                  ? Layout.Height * 0.07
+                  : Layout.Height * 0.06,
+              backgroundColor: Colors.lightGray,
+              justifyContent: 'center',
+              alignItems: 'center',
+              paddingBottom: Platform.OS == 'ios' ? Layout.Height * 0.01 : 0,
+            })}>
+            <Text
+              style={{
+                color: Colors.red,
+                fontSize: Layout.FontScale * 18,
+                fontWeight: 'bold',
+              }}>
+              삭제
+            </Text>
+          </Pressable>
+          <Pressable
+            style={({pressed}) => ({
+              position: 'absolute',
+              bottom: 0,
+              right: 0,
+              opacity: pressed ? 0.5 : 1,
+              width: Layout.Width * 0.5,
+              height:
+                Platform.OS == 'ios'
+                  ? Layout.Height * 0.07
+                  : Layout.Height * 0.06,
+              backgroundColor: Colors.yellow,
+              justifyContent: 'center',
+              alignItems: 'center',
+              paddingBottom: Platform.OS == 'ios' ? Layout.Height * 0.01 : 0,
+            })}>
+            <Text
+              style={{
+                color: Colors.black,
+                fontSize: Layout.FontScale * 18,
+                fontWeight: 'bold',
+              }}>
+              편집
+            </Text>
+          </Pressable>
         </View>
       </Modal>
 
