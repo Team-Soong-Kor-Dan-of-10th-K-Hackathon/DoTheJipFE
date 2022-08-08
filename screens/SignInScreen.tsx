@@ -16,7 +16,7 @@ import {RootStackScreenProps} from '../types';
 import Logo from '../assets/images/logo.svg';
 import Kakao from '../assets/icons/kakao.svg';
 import Naver from '../assets/icons/naver.svg';
-
+import axios from 'axios';
 const userAccounts = [
   {
     email: '1234',
@@ -97,7 +97,20 @@ export default function SignInScreen({
         onBlur={() => setPasswordFieldFocused(false)}
       />
       <Pressable
-        onPress={() => requestAuth(email, password)}
+        onPress={() => {
+          axios.post('http://3.39.203.36:8080/members/login', {
+            email: email,
+            password: password,
+          })
+          .then(function (response) {
+            console.log(response);
+            navigation.navigate('ToDoList');
+          })
+          .catch(function (error) {
+            console.log(error);
+            Alert.alert('아이디와 비밀번호를 확인해주세요');
+          });
+        }}
         style={({pressed}) => ({
           opacity: pressed ? 0.5 : 1,
           width: Layout.Width * 0.86,
