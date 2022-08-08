@@ -93,7 +93,6 @@ export default function SelectCategoryScreen({
             title={item.title}
             color={item.color}
             detail={item.detail}
-            icon={item.icon}
             onPress={() =>
               navigation.navigate('AddToDo', {category: item.title})
             }
@@ -108,28 +107,15 @@ export default function SelectCategoryScreen({
             alignItems: 'center',
             backgroundColor: Colors.lightGray,
             borderRadius: 15,
-            paddingHorizontal: Layout.Width * 0.03,
+            paddingHorizontal: Layout.Width * 0.04,
             marginVertical: Layout.Height * 0.01,
           })}
           onPress={() => navigation.navigate('AddCategory')}>
-          <View
-            style={{
-              width: Layout.Width * 0.07,
-              height: Layout.Width * 0.07,
-              borderRadius: Layout.Width * 0.07,
-              backgroundColor: Colors.black,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <AddIcon width={Layout.Width * 0.04} />
-          </View>
-
           <Text
             style={{
               color: Colors.black,
               fontSize: Layout.FontScale * 18,
               fontWeight: 'bold',
-              marginLeft: Layout.Width * 0.03,
             }}>
             카테고리 추가
           </Text>

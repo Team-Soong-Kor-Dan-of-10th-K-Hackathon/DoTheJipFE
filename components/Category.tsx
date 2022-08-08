@@ -14,7 +14,6 @@ export default function Category(props: {
   title: string;
   color: ColorValue;
   detail: string;
-  icon: JSX.Element;
   onPress: (event: GestureResponderEvent) => void;
 }) {
   return (
@@ -27,7 +26,7 @@ export default function Category(props: {
         alignItems: 'center',
         backgroundColor: props.color,
         borderRadius: 15,
-        paddingHorizontal: Layout.Width * 0.03,
+        paddingHorizontal: Layout.Width * 0.04,
         marginVertical: Layout.Height * 0.01,
         justifyContent: 'space-between',
       })}
@@ -37,13 +36,11 @@ export default function Category(props: {
           flexDirection: 'row',
           alignItems: 'center',
         }}>
-        {props.icon}
         <Text
           style={{
             color: props.title == '기타' ? Colors.white : Colors.black,
             fontSize: Layout.FontScale * 18,
             fontWeight: 'bold',
-            marginLeft: Layout.Width * 0.03,
           }}>
           {props.title}
         </Text>

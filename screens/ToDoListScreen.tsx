@@ -26,10 +26,10 @@ import {RootStackScreenProps} from '../types';
 function filterToDoList(list: ITodoTypes[]) {
   const filteredToDoList = [];
   for (var i = 0; i < list.length; i++) {
-    if (list[i].data.filter(item => item.who == '아들').length > 0)
+    if (list[i].data.filter(item => item.who == '막냉이').length > 0)
       filteredToDoList.push({
         title: list[i].title,
-        data: list[i].data.filter(item => item.who == '아들'),
+        data: list[i].data.filter(item => item.who == '막냉이'),
       });
   }
   return filteredToDoList;
