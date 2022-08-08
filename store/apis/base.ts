@@ -20,7 +20,7 @@ const baseAPI = {
       paramsSerializer: params => qs.stringify(params, { arrayFormat }),
       ...config,
     }),
-  post: (url: string, data: any, config: any) => axiosInstance.post(url, data, config),
+  post: (url: string, data: any, ) => axiosInstance.post(url, data),
   put: (url: string, data: any, config: any) => axiosInstance.put(url, data, config),
   delete: (url: string, params: any) => axiosInstance.delete(url, { data: { ...params } }),
 };
