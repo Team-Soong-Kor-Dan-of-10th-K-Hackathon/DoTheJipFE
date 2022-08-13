@@ -10,3 +10,7 @@ import { todosState } from '../atoms/todo';
 //         family-id =
 //     })
 // }
+
+export function getFamilyTodo(familyid : any){
+    return baseAPI.get(`/families/${familyid}/todos`, {},  false, 'repeat', ''    )
+}
