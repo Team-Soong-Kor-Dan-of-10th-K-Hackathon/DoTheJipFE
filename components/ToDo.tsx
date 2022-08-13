@@ -139,11 +139,11 @@ export default function ToDo({ id, todo, category, who, done, onDone, onDelete, 
                   height: Layout.Width * 0.06,
                   borderRadius: Layout.Width * 0.06,
                   backgroundColor:
-                    who == '엄마'
+                    who == '마미'
                       ? Colors.purple
-                      : who == '아빠'
+                      : who == '김아빠'
                       ? Colors.skyblue
-                      : who == '딸'
+                      : who == '김공주'
                       ? Colors.pink
                       : Colors.green,
                 }}
@@ -185,13 +185,13 @@ export default function ToDo({ id, todo, category, who, done, onDone, onDelete, 
               height: Layout.Width * 0.06,
               borderRadius: Layout.Width * 0.06,
               backgroundColor:
-                who == '엄마'
-                  ? Colors.purple
-                  : who == '아빠'
-                  ? Colors.skyblue
-                  : who == '딸'
-                  ? Colors.pink
-                  : Colors.green,
+              who == '마미'
+              ? Colors.purple
+              : who == '김아빠'
+              ? Colors.skyblue
+              : who == '김공주'
+              ? Colors.pink
+              : Colors.green,
             }}
           />
           <Text
@@ -208,13 +208,13 @@ export default function ToDo({ id, todo, category, who, done, onDone, onDelete, 
             opacity: pressed ? 0.5 : 1,
             borderRadius: 5,
             backgroundColor: done
-              ? who == '엄마'
-                ? Colors.purple
-                : who == '아빠'
-                ? Colors.skyblue
-                : who == '딸'
-                ? Colors.pink
-                : Colors.green
+              ? who == '마미'
+              ? Colors.purple
+              : who == '김아빠'
+              ? Colors.skyblue
+              : who == '김공주'
+              ? Colors.pink
+              : Colors.green
               : Colors.darkGray,
           })}>
           <CheckBox />
