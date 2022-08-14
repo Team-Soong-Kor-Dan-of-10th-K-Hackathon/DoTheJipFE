@@ -1,12 +1,14 @@
 import axios from 'axios';
 import { selector, selectorFamily } from 'recoil';
 import { todosState } from '../atoms/todo';
-// import { getFamilyTodo } from '../main';
+import { familyIdState } from '../atoms/user';
+// import { getFamilyTodo } from '../apis/main';
 
 // export const getToDosSelector = selector({
 //     key: `todos/get`,
 //     get: async ({ get }) => {
-//         const { data } = await getFamilyTodo();
+//         const familyId = get(familyIdState);
+//         const { data } = await getFamilyTodo(familyId);
 //         return data;
 //     },
 //     set: ({ set }, newValue) => {

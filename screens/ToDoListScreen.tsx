@@ -9,7 +9,7 @@ import {
   Modal,
 } from 'react-native';
 
-import {useRecoilState} from 'recoil';
+import {useRecoilState, useRecoilValue} from 'recoil';
 import {todosState, ITodoTypes, ITodoitemTypes} from '../store/atoms/todo';
 
 import Colors from '../constants/Colors';
@@ -22,6 +22,7 @@ import {useRef, useState} from 'react';
 
 import AddIcon from '../assets/icons/add.svg';
 import {RootStackScreenProps} from '../types';
+// import {getToDosSelector} from '../store/selectors/todo';///
 
 function filterToDoList(list: ITodoTypes[]) {
   const filteredToDoList = [];
@@ -41,6 +42,7 @@ export default function ToDoListScreen({
   const [date, setDate] = useState(new Date());
   const [index, setIndex] = useState(0);
   const [todos, setTodos] = useRecoilState<ITodoTypes[]>(todosState);
+  // const [todos, setTodos] = useRecoilValue(getToDosSelector);
   const scrollViewRef = useRef<ScrollView>(null);
 
   const onDone = React.useCallback(
