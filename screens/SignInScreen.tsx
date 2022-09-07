@@ -98,18 +98,19 @@ export default function SignInScreen({
       />
       <Pressable
         onPress={() => {
-          axios.post('http://3.39.203.36:8080/members/login', {
-            email: email,
-            password: password,
-          })
-          .then(function (response) {
-            console.log(response);
-            navigation.navigate('ToDoList');
-          })
-          .catch(function (error) {
-            console.log(error);
-            Alert.alert('아이디와 비밀번호를 확인해주세요');
-          });
+          axios
+            .post('http://3.35.40.190:8080/members/login', {
+              email: email,
+              password: password,
+            })
+            .then(function (response) {
+              console.log(response);
+              navigation.navigate('ToDoList');
+            })
+            .catch(function (error) {
+              console.log(error);
+              Alert.alert('아이디와 비밀번호를 확인해주세요');
+            });
         }}
         style={({pressed}) => ({
           opacity: pressed ? 0.5 : 1,
